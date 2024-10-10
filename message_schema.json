@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "from": {
+      "type": "string"
+    },
+    "to": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "subject": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "type": {
+      "type": "integer",
+      "enum": [1, 2, 3, 4]
+    },
+    "cc": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "contentType": {
+      "type": "integer"
+    },
+    "charset": {
+      "type": "string"
+    },
+    "level": {
+      "type": "integer",
+      "default": 0
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "attachments": {
+      "type": "array"
+    },
+    "references": {
+      "type": "string"
+    },
+    "inReplyTo": {
+      "type": "string"
+    },
+    "subjectId": {
+      "type": "string"
+    },
+    "createTime": {
+      "type": "integer"
+    },
+    "lastUpdateTime": {
+      "type": "integer"
+    },
+    "state": {
+      "type": "integer"
+    },
+    "token": {
+      "type": "string"
+    },
+    "fromTag": {
+      "type": "string"
+    }
+  },
+  "required": ["from", "to", "subject", "content", "type"]
+}

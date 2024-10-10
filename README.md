@@ -1,5 +1,7 @@
 # WebSocket Server for Real-time Communication
 
+[中文版](README_CN.md)
+
 This project implements a WebSocket server designed for real-time communication, suitable for applications requiring instant messaging, live updates, or any scenario demanding low-latency data exchange between clients and server.
 
 ## Project Structure
@@ -25,27 +27,27 @@ The main components of this project are:
 
 The following table describes the schema for the message protocol used in this WebSocket server:
 
-| Field          | Type    | Description                                   | Required |
-|----------------|---------|-----------------------------------------------|----------|
-| from           | string  | Message source                                | Yes      |
-| to             | array   | Recipients of the message                     | Yes      |
-| subject        | string  | Message subject                               | Yes      |
-| content        | string  | Message content (base64 encoded)              | Yes      |
-| type           | integer | Message type (1, 2, 3, or 4)                  | Yes      |
-| cc             | array   | Carbon copy recipients                        | No       |
-| contentType    | integer | Content type of the message                   | No       |
-| charset        | string  | Character encoding                            | No       |
-| level          | integer | Message priority level (default: 0)           | No       |
-| tags           | array   | Tags associated with the message              | No       |
-| attachments    | array   | Attachments                                   | No       |
-| references     | string  | Related topic ID                              | No       |
-| inReplyTo      | string  | ID of the message being replied to            | No       |
-| subjectId      | string  | Topic ID                                      | No       |
-| createTime     | integer | Creation time (Unix timestamp)                | No       |
-| lastUpdateTime | integer | Last update time (Unix timestamp)             | No       |
-| state          | integer | Message sending state                         | No       |
-| token          | string  | Authentication token                          | No       |
-| fromTag        | string  | Source tag (e.g., QQ, APP, TAB)               | No       |
+| Field          | Type    | Description                                | Required |
+|----------------|---------|--------------------------------------------| -------- |
+| from           | string  | Message source                             | Yes      |
+| to             | string/array | Message recipient(s)                  | Yes      |
+| subject        | string  | Message subject                            | Yes      |
+| content        | string  | Message content (base64 encoded)           | Yes      |
+| type           | integer | Message type (1, 2, 3, or 4)               | Yes      |
+| cc             | string/array | Carbon copy recipient(s)              | No       |
+| contentType    | integer | Content type of the message                | No       |
+| charset        | string  | Character encoding                         | No       |
+| level          | integer | Message priority (default: 0)              | No       |
+| tags           | array   | Tags associated with the message           | No       |
+| attachments    | array   | Attachments                                | No       |
+| references     | string  | Related topic ID                           | No       |
+| inReplyTo      | string  | ID of the message being replied to         | No       |
+| subjectId      | string  | Subject ID                                 | No       |
+| createTime     | integer | Creation time (Unix timestamp)             | No       |
+| lastUpdateTime | integer | Last update time (Unix timestamp)          | No       |
+| state          | integer | Message sending state                      | No       |
+| token          | string  | Authentication token                       | No       |
+| fromTag        | string  | Source tag (e.g., QQ, APP, TAB)            | No       |
 
 ## Building an Executable
 

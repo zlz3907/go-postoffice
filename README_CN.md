@@ -1,5 +1,7 @@
 # 实时通信 WebSocket 服务器
 
+[English](README.md)
+
 本项目实现了一个专为实时通信设计的 WebSocket 服务器，适用于需要即时消息传递、实时更新或任何需要客户端和服务器之间低延迟数据交换的应用场景。
 
 ## 项目结构
@@ -28,11 +30,11 @@
 | 字段           | 类型    | 描述                                | 是否必需 |
 |----------------|---------|-------------------------------------|----------|
 | from           | string  | 消息来源                            | 是       |
-| to             | array   | 消息接收者                          | 是       |
+| to             | string/array | 消息接收者                     | 是       |
 | subject        | string  | 消息主题                            | 是       |
 | content        | string  | 消息内容（base64 编码）             | 是       |
 | type           | integer | 消息类型（1, 2, 3, 或 4）           | 是       |
-| cc             | array   | 抄送接收者                          | 否       |
+| cc             | string/array | 抄送接收者                     | 否       |
 | contentType    | integer | 消息内容类型                        | 否       |
 | charset        | string  | 字符编码                            | 否       |
 | level          | integer | 消息优先级（默认：0）               | 否       |

@@ -45,13 +45,21 @@ func startWebSocketServer() {
 		maxConnections = int(maxConn)
 	}
 
-	postOffice := socket.NewPostOffice(maxConnections)
+	// 如果要使用 schema 验证
+	// postOffice, err := socket.NewPostOffice(maxConnections, "message_schema.json")
+
+	// 如果不使用 schema 验证
+	postOffice, err := socket.NewPostOffice(maxConnections, "")
+
+	if err != nil {
+		log.Fatalf("Failed to create PostOffice: %v", err)
+	}
 
 	http.HandleFunc("/ws", postOffice.HandleConnection)
 
 	port := fmt.Sprintf(":%v", gnasConfig["socketPort"])
 	// log.Printf("WebSocket server listening on port %s\n", port)
-	err := http.ListenAndServe(port, nil)
+	err = http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Printf("Error starting WebSocket server: %v", err)
 		// 不使用 panic，而是让函数正常返回，这样可以触发 main 中的程序退出逻辑
