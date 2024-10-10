@@ -14,12 +14,10 @@
     "subject": {
       "type": "string"
     },
-    "content": {
-      "type": "string"
-    },
+    "content": {},
     "type": {
-      "type": "integer",
-      "enum": [1, 2, 3, 4]
+      "type": "string",
+      "enum": ["log","heartbeat","msg"]
     },
     "cc": {
       "oneOf": [

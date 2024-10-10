@@ -4,7 +4,6 @@
 package main
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -33,8 +32,8 @@ type Message struct {
 	From    string      `json:"from"`
 	To      interface{} `json:"to"` // 可以是字符串或字符串数组
 	Subject string      `json:"subject"`
-	Content string      `json:"content"` // base64 编码的内容
-	Type    int         `json:"type"`
+	Content interface{} `json:"content"` // 可以是任何类型
+	Type    string      `json:"type"`    // 更新为字符串类型
 }
 
 var clients []*Client
@@ -116,14 +115,12 @@ func sendMessageToAll(sender *Client) {
 	}
 
 	content := fmt.Sprintf("Hello from %s at %s", sender.ID, time.Now().Format(time.RFC3339))
-	encodedContent := base64.StdEncoding.EncodeToString([]byte(content))
-
 	message := Message{
 		From:    sender.ID,
 		To:      recipients,
 		Subject: "Test Message",
-		Content: encodedContent,
-		Type:    1, // 假设 1 代表普通消息
+		Content: content,
+		Type:    "msg", // 使用字符串类型的消息类型
 	}
 
 	jsonMessage, err := json.Marshal(message)

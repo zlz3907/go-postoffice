@@ -25,15 +25,15 @@
 
 ## 消息协议模式
 
-以下表格描述了此 WebSocket 服务器使用的消息协议模式：
+以下表格描述了此 WebSocket 服务器使用的消息协议模���：
 
 | 字段           | 类型    | 描述                                | 是否必需 |
 |----------------|---------|-------------------------------------|----------|
 | from           | string  | 消息来源                            | 是       |
 | to             | string/array | 消息接收者                     | 是       |
 | subject        | string  | 消息主题                            | 是       |
-| content        | string  | 消息内容（base64 编码）             | 是       |
-| type           | integer | 消息类型（1, 2, 3, 或 4）           | 是       |
+| content        | any     | 消息内容                            | 是       |
+| type           | string  | 消息类型（"log"、"heartbeat" 或 "msg"）| 是       |
 | cc             | string/array | 抄送接收者                     | 否       |
 | contentType    | integer | 消息内容类型                        | 否       |
 | charset        | string  | 字符编码                            | 否       |
@@ -48,6 +48,24 @@
 | state          | integer | 消息发送状态                        | 否       |
 | token          | string  | 认证令牌                            | 否       |
 | fromTag        | string  | 来源标签（例如：QQ, APP, TAB）      | 否       |
+
+## 配置文件
+
+将以下内容复制到 `.env/config-dev.json` 文件中：
+
+```json
+{
+	"dataSource": {
+		"redis": {
+			"gnas-ai": {
+				"uri": "127.0.0.1:6379"
+			}
+		}
+	},
+	"socketPort": 7502,
+	"maxWebSocketConnections": 20000
+}
+```
 
 ## 构建可执行文件
 
@@ -74,3 +92,57 @@
 5. 生成的可执行文件可以直接在目标系统上运行，无需安装 Go。
 
 部署可执行文件时，请记得包含必要的配置文件（`.env` 文件夹），以确保在不同环境中正常运行。
+
+## Python 客户端示例
+
+以下是使用 Python 客户端连接到 WebSocket 服务器的示例：
+
+```python
+import websocket
+
+def on_message(ws, message):
+    print(f"收到消息: {message}")
+
+def on_error(ws, error):
+    print(f"WebSocket 错误: {error}")
+
+def on_close(ws):
+    print("WebSocket 连接已关闭")
+
+def on_open(ws):
+    print("WebSocket 连接已打开")
+
+if __name__ == "__main__":
+    websocket.enableTrace(True)
+    
+    # 定义带有客户端标识符的 WebSocket URL
+    ws_url = "ws://localhost:7502?clientID=python-client-001"
+    
+    # 定义带有认证令牌的头部
+    headers = {
+        "Authorization": "Bearer your-auth-token-here"
+    }
+    
+    # 创建带有头部的 WebSocket 连接
+    ws = websocket.WebSocketApp(ws_url,
+                                header=headers,
+                                on_message=on_message,
+                                on_error=on_error,
+                                on_close=on_close)
+    ws.on_open = on_open
+    
+    # 运行 WebSocket 连接
+    ws.run_forever()
+    
+    # 连接建立后，您可以发送消息
+    ws.send(json.dumps({
+        "from": "python-client",
+        "to": "server",
+        "subject": "问候",
+        "content": "你好，服务器！",
+        "type": "msg"
+    }))
+    
+    # 完成后关闭连接
+    ws.close()
+```

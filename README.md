@@ -32,8 +32,8 @@ The following table describes the schema for the message protocol used in this W
 | from           | string  | Message source                             | Yes      |
 | to             | string/array | Message recipient(s)                  | Yes      |
 | subject        | string  | Message subject                            | Yes      |
-| content        | string  | Message content (base64 encoded)           | Yes      |
-| type           | integer | Message type (1, 2, 3, or 4)               | Yes      |
+| content        | any     | Message content                           | Yes      |
+| type           | string  | Message type ("log", "heartbeat", or "msg") | Yes      |
 | cc             | string/array | Carbon copy recipient(s)              | No       |
 | contentType    | integer | Content type of the message                | No       |
 | charset        | string  | Character encoding                         | No       |
@@ -48,6 +48,24 @@ The following table describes the schema for the message protocol used in this W
 | state          | integer | Message sending state                      | No       |
 | token          | string  | Authentication token                       | No       |
 | fromTag        | string  | Source tag (e.g., QQ, APP, TAB)            | No       |
+
+## Configuration File
+
+Copy the following content to the `.env/config-dev.json` file:
+
+```json
+{
+	"dataSource": {
+		"redis": {
+			"gnas-ai": {
+				"uri": "127.0.0.1:6379"
+			}
+		}
+	},
+	"socketPort": 7502,
+	"maxWebSocketConnections": 20000
+}
+```
 
 ## Building an Executable
 
@@ -74,3 +92,57 @@ To build this project into an executable file, follow these steps:
 5. The resulting executable can be run directly on the target system without needing Go installed.
 
 Remember to include the necessary configuration files (`.env` folder) when deploying the executable to ensure proper functionality in different environments.
+
+## Python Client Example
+
+Here's an example of how to connect to the WebSocket server using a Python client:
+
+```python
+import websocket
+
+def on_message(ws, message):
+    print(f"Received message: {message}")
+
+def on_error(ws, error):
+    print(f"WebSocket error: {error}")
+
+def on_close(ws):
+    print("WebSocket connection closed")
+
+def on_open(ws):
+    print("WebSocket connection opened")
+
+if __name__ == "__main__":
+    websocket.enableTrace(True)
+    
+    # Define the WebSocket URL with client identifier
+    ws_url = "ws://localhost:7502?clientID=python-client-001"
+    
+    # Define headers with authentication token
+    headers = {
+        "Authorization": "Bearer your-auth-token-here"
+    }
+    
+    # Create WebSocket connection with headers
+    ws = websocket.WebSocketApp(ws_url,
+                                header=headers,
+                                on_message=on_message,
+                                on_error=on_error,
+                                on_close=on_close)
+    ws.on_open = on_open
+    
+    # Run the WebSocket connection
+    ws.run_forever()
+    
+    # After connection is established, you can send messages
+    ws.send(json.dumps({
+        "from": "python-client",
+        "to": "server",
+        "subject": "Greeting",
+        "content": "Hello, Server!",
+        "type": "msg"
+    }))
+    
+    # Close the connection when done
+    ws.close()
+```
