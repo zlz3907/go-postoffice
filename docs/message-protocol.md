@@ -36,28 +36,32 @@ Messages in GO-POSTOFFICE follow a JSON structure inspired by email protocols. H
 
 ### Required Fields
 
-- `from` (string): The identifier of the message sender.
-- `to` (string or array of strings): The identifier(s) of the message recipient(s).
-- `subject` (string): The subject or title of the message.
-- `content` (any): The main body of the message. Can be a string or a more complex object.
-- `type` (string): The type of the message. Must be one of: "log", "heartbeat", or "msg".
+| Field | Type | Description |
+|-------|------|-------------|
+| from | string | The identifier of the message sender |
+| to | string or array of strings | The identifier(s) of the message recipient(s) |
+| subject | string | The subject or title of the message |
+| content | any | The main body of the message |
+| type | string | The type of the message (e.g., "log", "heartbeat", "msg") |
 
 ### Optional Fields
 
-- `cc` (string or array of strings): Carbon copy recipients.
-- `contentType` (integer): An identifier for the type of content in the message.
-- `charset` (string): The character encoding of the message content.
-- `level` (integer): The priority or importance level of the message. Default is 0.
-- `tags` (array of strings): Categories or labels associated with the message.
-- `attachments` (array): Any files or additional data attached to the message.
-- `references` (string): Identifier for message threading or grouping.
-- `inReplyTo` (string): Identifier of the message this is in reply to.
-- `subjectId` (string): Identifier for grouping messages by subject or conversation.
-- `createTime` (integer): Unix timestamp of when the message was created.
-- `lastUpdateTime` (integer): Unix timestamp of when the message was last updated.
-- `state` (integer): Current state or status of the message.
-- `token` (string): Authentication or validation token.
-- `fromTag` (string): Category or type of the sender.
+| Field | Type | Description |
+|-------|------|-------------|
+| cc | string or array of strings | Carbon copy recipients |
+| contentType | integer | An identifier for the type of content in the message |
+| charset | string | The character encoding of the message content |
+| level | integer | The priority or importance level of the message |
+| tags | array of strings | Categories or labels associated with the message |
+| attachments | array | Any files or additional data attached to the message |
+| references | string | Identifier for message threading or grouping |
+| inReplyTo | string | Identifier of the message this is in reply to |
+| subjectId | string | Identifier for grouping messages by subject or conversation |
+| createTime | integer | Unix timestamp of when the message was created |
+| lastUpdateTime | integer | Unix timestamp of when the message was last updated |
+| state | integer | Current state or status of the message |
+| token | string | Authentication or validation token |
+| fromTag | string | Category or type of the sender |
 
 ## Message Types
 

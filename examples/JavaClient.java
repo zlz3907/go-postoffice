@@ -3,6 +3,7 @@ import java.net.http.HttpClient;
 import java.net.http.WebSocket;
 import java.nio.ByteBuffer;
 import java.util.concurrent.CompletionStage;
+import org.json.JSONObject;
 
 public class JavaClient {
     public static void main(String[] args) throws Exception {
@@ -31,9 +32,16 @@ public class JavaClient {
                 .buildAsync(URI.create("ws://localhost:7502/ws"), listener)
                 .join();
 
-        webSocket.sendText("Hello, server!", true);
+        while (true) {
+            JSONObject message = new JSONObject();
+            message.put("from", "java-client");
+            message.put("to", "server");
+            message.put("subject", "Hello");
+            message.put("content", "How are you?");
+            message.put("type", "msg");
 
-        // Keep the connection open
-        Thread.sleep(Long.MAX_VALUE);
+            webSocket.sendText(message.toString(), true);
+            Thread.sleep(5000);
+        }
     }
 }

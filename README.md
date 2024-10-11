@@ -47,12 +47,12 @@ Ensure that Go (version 1.23.1 or higher) is installed on your system.
 
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/GO-POSTOFFICE.git
+   git clone https://github.com/zlz3907/go-postoffice.git
    ```
 
 2. Enter the project directory:
    ```
-   cd GO-POSTOFFICE
+   cd go-postoffice
    ```
 
 3. Install dependencies:
@@ -95,8 +95,10 @@ For message format and field descriptions, please refer to the [Message Protocol
 
 ## Client Examples
 
-- [Python Client Example](examples/python-client.py)
+- [Go Client Example](examples/go-client.go)
+- [Java Client Example](examples/JavaClient.java)
 - [JavaScript Client Example](examples/js-client.js)
+- [Python Client Example](examples/python-client.py)
 
 ## Contributing
 
@@ -104,4 +106,4 @@ We welcome contributions of any form. Please read the [Contributing Guidelines](
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE) file for details.

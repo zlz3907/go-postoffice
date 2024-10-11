@@ -81,7 +81,7 @@
 
 要更改配置：
 
-1. 复制适当的配置文件（例如，开发环境使用 `config-dev.json`）到 `config-zhycit.json`。
+1. 复制适当的配置文件（例如，开发环境使用 `config-dev.json`）到 `.env/config-zhycit.json`。
 2. 根据需要修改 `config-zhycit.json` 中的值。
 3. 重启 GO-POSTOFFICE 服务器以使更改生效。
 

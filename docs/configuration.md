@@ -81,7 +81,7 @@ Here's an example of a complete configuration file:
 
 To change the configuration:
 
-1. Copy the appropriate configuration file (e.g., `config-dev.json` for development) to `config-zhycit.json`.
+1. Copy the appropriate configuration file (e.g., `config-dev.json` for development) to `.env/config-zhycit.json`.
 2. Modify the values in `config-zhycit.json` as needed.
 3. Restart the GO-POSTOFFICE server for the changes to take effect.
 

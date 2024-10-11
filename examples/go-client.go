@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/url"
 	"os"
@@ -9,6 +10,14 @@ import (
 
 	"github.com/gorilla/websocket"
 )
+
+type Message struct {
+	From    string      `json:"from"`
+	To      string      `json:"to"`
+	Subject string      `json:"subject"`
+	Content interface{} `json:"content"`
+	Type    string      `json:"type"`
+}
 
 func main() {
 	interrupt := make(chan os.Signal, 1)
@@ -37,10 +46,31 @@ func main() {
 		}
 	}()
 
+	ticker := time.NewTicker(time.Second * 5)
+	defer ticker.Stop()
+
 	for {
 		select {
 		case <-done:
 			return
+		case <-ticker.C:
+			message := Message{
+				From:    "go-client",
+				To:      "server",
+				Subject: "Hello",
+				Content: "How are you?",
+				Type:    "msg",
+			}
+			jsonMessage, err := json.Marshal(message)
+			if err != nil {
+				log.Println("json marshal:", err)
+				return
+			}
+			err = c.WriteMessage(websocket.TextMessage, jsonMessage)
+			if err != nil {
+				log.Println("write:", err)
+				return
+			}
 		case <-interrupt:
 			log.Println("interrupt")
 			err := c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
