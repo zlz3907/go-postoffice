@@ -9,7 +9,7 @@
 要与 GO-POSTOFFICE 服务器建立 WebSocket 连接：
 
 ```
-ws://localhost:7502/ws
+ws://localhost:7502/
 ```
 
 如果连接到远程服务器，请将 `localhost` 替换为适当的主机地址。
@@ -20,7 +20,7 @@ ws://localhost:7502/ws
 
 示例：
 ```
-ws://localhost:7502/ws?clientID=user123
+ws://localhost:7502/?clientID=user123
 ```
 
 ### 认证
@@ -94,7 +94,7 @@ Authorization: Bearer your_token_here
 ### 连接到 WebSocket 服务器
 
 ```javascript
-const ws = new WebSocket('ws://localhost:7502/ws?clientID=user123');
+const ws = new WebSocket('ws://localhost:7502/?clientID=user123');
 ws.onopen = () => {
   console.log('已连接到服务器');
 };

@@ -19,7 +19,7 @@ def create_message(msg_type, to, content):
     }
 
 async def test_client():
-    uri = "ws://localhost:7502/ws"
+    uri = f"ws://{host}:{port}/"
     async with websockets.connect(uri) as websocket:
         print(f"Connected to {uri}")
 

@@ -9,7 +9,7 @@ This document describes the API for the GO-POSTOFFICE project.
 To establish a WebSocket connection with the GO-POSTOFFICE server:
 
 ```
-ws://localhost:7502/ws
+ws://localhost:7502/
 ```
 
 Replace `localhost` with the appropriate host if connecting to a remote server.
@@ -20,7 +20,7 @@ Replace `localhost` with the appropriate host if connecting to a remote server.
 
 Example:
 ```
-ws://localhost:7502/ws?clientID=user123
+ws://localhost:7502/?clientID=user123
 ```
 
 ### Authentication
@@ -94,7 +94,7 @@ If an error occurs, the server will send an error message in the following forma
 ### Connecting to the WebSocket server
 
 ```javascript
-const ws = new WebSocket('ws://localhost:7502/ws?clientID=user123');
+const ws = new WebSocket('ws://localhost:7502/?clientID=user123');
 ws.onopen = () => {
   console.log('Connected to the server');
 };

@@ -3,7 +3,7 @@ import websockets
 import json
 
 async def hello():
-    uri = "ws://localhost:7502/ws"
+    uri = "ws://localhost:7502/"
     async with websockets.connect(uri) as websocket:
         while True:
             message = {

@@ -29,7 +29,7 @@ public class JavaClient {
         };
 
         WebSocket webSocket = client.newWebSocketBuilder()
-                .buildAsync(URI.create("ws://localhost:7502/ws"), listener)
+                .buildAsync(URI.create("ws://localhost:7502/"), listener)
                 .join();
 
         while (true) {
