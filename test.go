@@ -18,11 +18,9 @@ import (
 )
 
 const (
-	// wsServerURL     = "ws://localhost:7502/ws"  // 使用本地地址进行测试
-	// wssServerURL    = "wss://localhost:7503/ws" // WSS URL，如果配置了SSL
-	wsServerURL     = "ws://socket.zhycit.com/ws"
-	wssServerURL    = "wss://socket.zhycit.com/wss"
-	numConnections  = 3 // 尝试连接的总数
+	wsServerURL     = "ws://localhost:7502"  // 使用本地地址进行测试
+	wssServerURL    = "wss://localhost:7503" // WSS URL，如果配置了SSL
+	numConnections  = 3                      // 尝试连接的总数
 	messageInterval = 1 * time.Second
 	authToken       = "your-auth-token-here" // 替换为实际的认证令牌
 )

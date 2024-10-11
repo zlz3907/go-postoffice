@@ -61,7 +61,7 @@ func startWebSocketServer() error {
 
 	// 创建一个新的 ServeMux
 	mux := http.NewServeMux()
-	mux.HandleFunc("/ws", postOffice.HandleConnection)
+	mux.HandleFunc("/", postOffice.HandleConnection)
 
 	// 设置 HTTP 服务器
 	httpServer := &http.Server{
