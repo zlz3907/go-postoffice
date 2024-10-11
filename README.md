@@ -71,8 +71,34 @@ Ensure that Go (version 1.23.1 or higher) is installed on your system.
    ```
 
 3. Build the executable:
+
+   For Linux:
    ```
-   go build -o postoffice main.go
+   env GOOS=linux GOARCH=amd64 go build -ldflags "-X main.env=zhycit" -o dist/go-postoffice-linux
+   ```
+
+   For macOS:
+   ```
+   env GOOS=darwin GOARCH=amd64 go build -ldflags "-X main.env=zhycit" -o dist/go-postoffice-macos
+   ```
+
+   For Windows:
+   ```
+   env GOOS=windows GOARCH=amd64 go build -ldflags "-X main.env=zhycit" -o dist/go-postoffice-windows.exe
+   ```
+
+   Note: Replace `zhycit` with your desired environment name if different.
+
+4. Run the built executable:
+
+   For Linux/macOS:
+   ```
+   ./dist/go-postoffice-linux   # or go-postoffice-macos
+   ```
+
+   For Windows:
+   ```
+   .\dist\go-postoffice-windows.exe
    ```
 
 ## Configuration

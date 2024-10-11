@@ -64,8 +64,34 @@ GO-POSTOFFICE 是一个基于 Go 语言实现的高性能 WebSocket 服务器，
    ```
 
 3. 构建可执行文件：
+
+   对于 Linux：
    ```
-   go build -o postoffice main.go
+   env GOOS=linux GOARCH=amd64 go build -ldflags "-X main.env=zhycit" -o dist/go-postoffice-linux
+   ```
+
+   对于 macOS：
+   ```
+   env GOOS=darwin GOARCH=amd64 go build -ldflags "-X main.env=zhycit" -o dist/go-postoffice-macos
+   ```
+
+   对于 Windows：
+   ```
+   env GOOS=windows GOARCH=amd64 go build -ldflags "-X main.env=zhycit" -o dist/go-postoffice-windows.exe
+   ```
+
+   注意：如果需要，请将 `zhycit` 替换为您想要的环境名称。
+
+4. 运行构建的可执行文件：
+
+   对于 Linux/macOS：
+   ```
+   ./dist/go-postoffice-linux   # 或 go-postoffice-macos
+   ```
+
+   对于 Windows：
+   ```
+   .\dist\go-postoffice-windows.exe
    ```
 
 ## 配置
