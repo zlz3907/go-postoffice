@@ -1,148 +1,107 @@
-# WebSocket Server for Real-time Communication
+# GO-POSTOFFICE
 
 [中文版](README_CN.md)
 
-This project implements a WebSocket server designed for real-time communication, suitable for applications requiring instant messaging, live updates, or any scenario demanding low-latency data exchange between clients and server.
+GO-POSTOFFICE is a high-performance WebSocket server implementation based on Go, designed using the post office concept model. This project primarily handles connection management, security authentication, and message (mail) distribution and delivery.
 
-## Project Structure
+## Table of Contents
 
-The main components of this project are:
+1. [Features](#features)
+2. [Installation](#installation)
+3. [Quick Start](#quick-start)
+4. [Configuration](#configuration)
+5. [API Documentation](#api-documentation)
+6. [Message Protocol](#message-protocol)
+7. [Client Examples](#client-examples)
+8. [Contributing](#contributing)
+9. [License](#license)
 
-1. `main.go`: The entry point of the application. It initializes the environment, starts the WebSocket server, and manages the program lifecycle.
+## Features
 
-2. `go.work`: Defines the Go workspace and specifies the modules used in the project.
+1. **High-performance Concurrent Processing**: Utilizes Go's goroutines and channels for efficient concurrent connection management.
 
-3. `.env/config-dev.json` and `.env/config-zhycit.json`: Configuration files for different environments (development and production). They contain settings for Redis, WebSocket port, and maximum connections.
+2. **Flexible Message Routing**: Based on the post office model, supports point-to-point and broadcast message distribution for efficient message delivery.
 
-4. `ai.zhycit.com/socket` package: (Not shown in the provided files) This package likely contains the implementation of the `PostOffice` struct, which handles WebSocket connections.
+3. **Security Authentication**: Integrates token authentication to ensure connection security.
 
-## Key Features
+4. **Configurable Message Validation**: Supports optional JSON Schema validation to ensure message format correctness.
 
-- Environment-specific configuration loading
-- WebSocket server with configurable maximum connections
-- Integration with Redis for data persistence (configuration present, implementation not shown)
-- Graceful shutdown mechanism
+5. **Environmental Adaptability**: Supports multi-environment configuration for easy deployment in different scenarios.
 
-## Message Protocol Schema
+6. **Graceful Service Management**: Implements graceful startup and shutdown mechanisms to ensure service stability.
 
-The following table describes the schema for the message protocol used in this WebSocket server:
+7. **Scalability**: Modular design for easy feature expansion and customization.
 
-| Field          | Type    | Description                                | Required |
-|----------------|---------|--------------------------------------------| -------- |
-| from           | string  | Message source                             | Yes      |
-| to             | string/array | Message recipient(s)                  | Yes      |
-| subject        | string  | Message subject                            | Yes      |
-| content        | any     | Message content                           | Yes      |
-| type           | string  | Message type ("log", "heartbeat", or "msg") | Yes      |
-| cc             | string/array | Carbon copy recipient(s)              | No       |
-| contentType    | integer | Content type of the message                | No       |
-| charset        | string  | Character encoding                         | No       |
-| level          | integer | Message priority (default: 0)              | No       |
-| tags           | array   | Tags associated with the message           | No       |
-| attachments    | array   | Attachments                                | No       |
-| references     | string  | Related topic ID                           | No       |
-| inReplyTo      | string  | ID of the message being replied to         | No       |
-| subjectId      | string  | Subject ID                                 | No       |
-| createTime     | integer | Creation time (Unix timestamp)             | No       |
-| lastUpdateTime | integer | Last update time (Unix timestamp)          | No       |
-| state          | integer | Message sending state                      | No       |
-| token          | string  | Authentication token                       | No       |
-| fromTag        | string  | Source tag (e.g., QQ, APP, TAB)            | No       |
+8. **Real-time Communication**: Full-duplex communication based on WebSocket, supporting real-time data exchange.
 
-## Configuration File
+### Advantages of the Post Office Model
 
-Copy the following content to the `.env/config-dev.json` file:
+- **Decoupling**: Complete separation of senders and receivers, increasing system flexibility.
+- **Reliability**: Message persistence and retry mechanisms ensure reliable message delivery.
+- **Extensibility**: Easy to add new message types and processing logic.
+- **Load Balancing**: Multiple "post office" instances can be implemented to increase system throughput.
 
-```json
-{
-	"dataSource": {
-		"redis": {
-			"gnas-ai": {
-				"uri": "127.0.0.1:6379"
-			}
-		}
-	},
-	"socketPort": 7502,
-	"maxWebSocketConnections": 20000
-}
-```
+## Installation
 
-## Building an Executable
+Ensure that Go (version 1.23.1 or higher) is installed on your system.
 
-To build this project into an executable file, follow these steps:
-
-1. Ensure you have Go installed on your system (version 1.23.1 or later as specified in `go.work`).
-
-2. Open a terminal and navigate to the project root directory.
-
-3. Run the following command to build the executable:
-
+1. Clone the repository:
    ```
-   go build -o websocket-server main.go
+   git clone https://github.com/your-username/GO-POSTOFFICE.git
    ```
 
-   This will create an executable named `websocket-server` (or `websocket-server.exe` on Windows) in the current directory.
-
-4. (Optional) To build for a specific platform, you can use the `GOOS` and `GOARCH` environment variables. For example, to build for Windows:
-
+2. Enter the project directory:
    ```
-   GOOS=windows GOARCH=amd64 go build -o websocket-server.exe main.go
+   cd GO-POSTOFFICE
    ```
 
-5. The resulting executable can be run directly on the target system without needing Go installed.
+3. Install dependencies:
+   ```
+   go mod tidy
+   ```
 
-Remember to include the necessary configuration files (`.env` folder) when deploying the executable to ensure proper functionality in different environments.
+## Quick Start
 
-## Python Client Example
+1. Configure the environment:
+   Copy `.env/config-dev.json` to `.env/config-zhycit.json` and modify the configuration as needed.
 
-Here's an example of how to connect to the WebSocket server using a Python client:
+2. Run the server:
+   ```
+   go run main.go
+   ```
 
-```python
-import websocket
+3. Build the executable:
+   ```
+   go build -o postoffice main.go
+   ```
 
-def on_message(ws, message):
-    print(f"Received message: {message}")
+## Configuration
 
-def on_error(ws, error):
-    print(f"WebSocket error: {error}")
+Main configuration items include:
 
-def on_close(ws):
-    print("WebSocket connection closed")
+- `socketPort`: WebSocket server port
+- `maxWebSocketConnections`: Maximum number of connections
+- `dataSource`: Data source configuration (e.g., Redis)
 
-def on_open(ws):
-    print("WebSocket connection opened")
+For detailed configuration instructions, please refer to the [Configuration Documentation](docs/configuration.md).
 
-if __name__ == "__main__":
-    websocket.enableTrace(True)
-    
-    # Define the WebSocket URL with client identifier
-    ws_url = "ws://localhost:7502?clientID=python-client-001"
-    
-    # Define headers with authentication token
-    headers = {
-        "Authorization": "Bearer your-auth-token-here"
-    }
-    
-    # Create WebSocket connection with headers
-    ws = websocket.WebSocketApp(ws_url,
-                                header=headers,
-                                on_message=on_message,
-                                on_error=on_error,
-                                on_close=on_close)
-    ws.on_open = on_open
-    
-    # Run the WebSocket connection
-    ws.run_forever()
-    
-    # After connection is established, you can send messages
-    ws.send(json.dumps({
-        "from": "python-client",
-        "to": "server",
-        "subject": "Greeting",
-        "content": "Hello, Server!",
-        "type": "msg"
-    }))
-    
-    # Close the connection when done
-    ws.close()
-```
+## API Documentation
+
+For API usage instructions, please refer to the [API Documentation](docs/api.md).
+
+## Message Protocol
+
+For message format and field descriptions, please refer to the [Message Protocol Documentation](docs/message-protocol.md).
+
+## Client Examples
+
+- [Python Client Example](examples/python-client.py)
+- [JavaScript Client Example](examples/js-client.js)
+
+## Contributing
+
+We welcome contributions of any form. Please read the [Contributing Guidelines](CONTRIBUTING.md) to learn how to participate in project development.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

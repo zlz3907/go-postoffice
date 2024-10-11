@@ -1,148 +1,107 @@
-# 实时通信 WebSocket 服务器
+# GO-POSTOFFICE
 
 [English](README.md)
 
-本项目实现了一个专为实时通信设计的 WebSocket 服务器，适用于需要即时消息传递、实时更新或任何需要客户端和服务器之间低延迟数据交换的应用场景。
+GO-POSTOFFICE 是一个基于 Go 语言的高性能 WebSocket 服务器实现，采用邮局的概念模型设计。该项目主要负责连接管理、安全认证和消息（邮件）的分发投递。
 
-## 项目结构
+## 目录
 
-本项目的主要组件包括：
+1. [特点](#特点)
+2. [安装](#安装)
+3. [快速开始](#快速开始)
+4. [配置](#配置)
+5. [API 文档](#api-文档)
+6. [消息协议](#消息协议)
+7. [客户端示例](#客户端示例)
+8. [贡献指南](#贡献指南)
+9. [许可证](#许可证)
 
-1. `main.go`：应用程序的入口点。负责初始化环境、启动 WebSocket 服务器，并管理程序生命周期。
+## 特点
 
-2. `go.work`：定义 Go 工作空间并指定项目中使用的模块。
+1. **高性能并发处理**：利用 Go 语言的 goroutine 和 channel 机制，实现高效的并发连接管理。
 
-3. `.env/config-dev.json` 和 `.env/config-zhycit.json`：不同环境（开发和生产）的配置文件。包含 Redis、WebSocket 端口和最大连接数等设置。
+2. **灵活的消息路由**：基于邮局模型，支持点对点和广播消息分发，实现高效的消息投递。
 
-4. `ai.zhycit.com/socket` 包：（在提供的文件中未显示）这个包可能包含了 `PostOffice` 结构体的实现，用于处理 WebSocket 连接。
+3. **安全认证机制**：集成 token 认证，确保连接的安全性。
 
-## 主要特性
+4. **可配置的消息验证**：支持可选的 JSON Schema 验证，确保消息格式的正确性。
 
-- 支持特定环境的配置加载
-- 可配置最大连接数的 WebSocket 服务器
-- 集成 Redis 用于数据持久化（配置存在，实现未显示）
-- 优雅的关闭机制
+5. **环境适应性**：支持多环境配置，便于在不同场景下部署。
 
-## 消息协议模式
+6. **优雅的服务管理**：实现了优雅启动和关闭机制，确保服务的稳定性。
 
-以下表格描述了此 WebSocket 服务器使用的消息协议模���：
+7. **可扩展性**：模块化设计，便于功能扩展和定制。
 
-| 字段           | 类型    | 描述                                | 是否必需 |
-|----------------|---------|-------------------------------------|----------|
-| from           | string  | 消息来源                            | 是       |
-| to             | string/array | 消息接收者                     | 是       |
-| subject        | string  | 消息主题                            | 是       |
-| content        | any     | 消息内容                            | 是       |
-| type           | string  | 消息类型（"log"、"heartbeat" 或 "msg"）| 是       |
-| cc             | string/array | 抄送接收者                     | 否       |
-| contentType    | integer | 消息内容类型                        | 否       |
-| charset        | string  | 字符编码                            | 否       |
-| level          | integer | 消息优先级（默认：0）               | 否       |
-| tags           | array   | 与消息关联的标签                    | 否       |
-| attachments    | array   | 附件                                | 否       |
-| references     | string  | 相关主题 ID                         | 否       |
-| inReplyTo      | string  | 被回复消息的 ID                     | 否       |
-| subjectId      | string  | 主题 ID                             | 否       |
-| createTime     | integer | 创建时间（Unix 时间戳）             | 否       |
-| lastUpdateTime | integer | 最后更新时间（Unix 时间戳）         | 否       |
-| state          | integer | 消息发送状态                        | 否       |
-| token          | string  | 认证令牌                            | 否       |
-| fromTag        | string  | 来源标签（例如：QQ, APP, TAB）      | 否       |
+8. **实时通信**：基于 WebSocket 的全双工通信，支持实时数据交换。
 
-## 配置文件
+### 邮局模型的优势
 
-将以下内容复制到 `.env/config-dev.json` 文件中：
+- **解耦性**：发送者和接收者完全分离，提高系统的灵活性。
+- **可靠性**：消息持久化和重试机制确保消息的可靠投递。
+- **扩展性**：易于添加新的消息类型和处理逻辑。
+- **负载均衡**：可以实现多个"邮局"实例，提高系统的吞吐量。
 
-```json
-{
-	"dataSource": {
-		"redis": {
-			"gnas-ai": {
-				"uri": "127.0.0.1:6379"
-			}
-		}
-	},
-	"socketPort": 7502,
-	"maxWebSocketConnections": 20000
-}
-```
+## 安装
 
-## 构建可执行文件
+确保您的系统已安装 Go（版本 1.23.1 或更高）。
 
-要将此项目构建成可执行文件，请按以下步骤操作：
-
-1. 确保您的系统上安装了 Go（版本 1.23.1 或更高，如 `go.work` 中指定）。
-
-2. 打开终端并导航到项目根目录。
-
-3. 运行以下命令来构建可执行文件：
-
+1. 克隆仓库：
    ```
-   go build -o websocket-server main.go
+   git clone https://github.com/your-username/GO-POSTOFFICE.git
    ```
 
-   这将在当前目录中创建一个名为 `websocket-server`（在 Windows 上为 `websocket-server.exe`）的可执行文件。
-
-4. （可选）要为特定平台构建，可以使用 `GOOS` 和 `GOARCH` 环境变量。例如，要为 Windows 构建：
-
+2. 进入项目目录：
    ```
-   GOOS=windows GOARCH=amd64 go build -o websocket-server.exe main.go
+   cd GO-POSTOFFICE
    ```
 
-5. 生成的可执行文件可以直接在目标系统上运行，无需安装 Go。
+3. 安装依赖：
+   ```
+   go mod tidy
+   ```
 
-部署可执行文件时，请记得包含必要的配置文件（`.env` 文件夹），以确保在不同环境中正常运行。
+## 快速开始
 
-## Python 客户端示例
+1. 配置环境：
+   复制 `.env/config-dev.json` 到 `.env/config-zhycit.json` 并根据需要修改配置。
 
-以下是使用 Python 客户端连接到 WebSocket 服务器的示例：
+2. 运行服务器：
+   ```
+   go run main.go
+   ```
 
-```python
-import websocket
+3. 构建可执行文件：
+   ```
+   go build -o postoffice main.go
+   ```
 
-def on_message(ws, message):
-    print(f"收到消息: {message}")
+## 配置
 
-def on_error(ws, error):
-    print(f"WebSocket 错误: {error}")
+主要配置项包括：
 
-def on_close(ws):
-    print("WebSocket 连接已关闭")
+- `socketPort`: WebSocket 服务器端口
+- `maxWebSocketConnections`: 最大连接数
+- `dataSource`: 数据源配置（如 Redis）
 
-def on_open(ws):
-    print("WebSocket 连接已打开")
+详细配置说明请参考 [配置文档](docs/configuration.md)。
 
-if __name__ == "__main__":
-    websocket.enableTrace(True)
-    
-    # 定义带有客户端标识符的 WebSocket URL
-    ws_url = "ws://localhost:7502?clientID=python-client-001"
-    
-    # 定义带有认证令牌的头部
-    headers = {
-        "Authorization": "Bearer your-auth-token-here"
-    }
-    
-    # 创建带有头部的 WebSocket 连接
-    ws = websocket.WebSocketApp(ws_url,
-                                header=headers,
-                                on_message=on_message,
-                                on_error=on_error,
-                                on_close=on_close)
-    ws.on_open = on_open
-    
-    # 运行 WebSocket 连接
-    ws.run_forever()
-    
-    # 连接建立后，您可以发送消息
-    ws.send(json.dumps({
-        "from": "python-client",
-        "to": "server",
-        "subject": "问候",
-        "content": "你好，服务器！",
-        "type": "msg"
-    }))
-    
-    # 完成后关闭连接
-    ws.close()
-```
+## API 文档
+
+API 使用说明请参考 [API 文档](docs/api.md)。
+
+## 消息协议
+
+消息格式和字段说明请参考 [消息协议文档](docs/message-protocol.md)。
+
+## 客户端示例
+
+- [Python 客户端示例](examples/python-client.py)
+- [JavaScript 客户端示例](examples/js-client.js)
+
+## 贡献指南
+
+我们欢迎任何形式的贡献。请阅读 [贡献指南](CONTRIBUTING.md) 了解如何参与项目开发。
+
+## 许可证
+
+本项目采用 MIT 许可证。详情请见 [LICENSE](LICENSE) 文件。

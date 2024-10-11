@@ -4,6 +4,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -17,7 +18,10 @@ import (
 )
 
 const (
-	wsServerURL     = "ws://localhost:7502/ws"
+	// wsServerURL     = "ws://localhost:7502/ws"  // 使用本地地址进行测试
+	// wssServerURL    = "wss://localhost:7503/ws" // WSS URL，如果配置了SSL
+	wsServerURL     = "ws://socket.zhycit.com/ws"
+	wssServerURL    = "wss://socket.zhycit.com/wss"
 	numConnections  = 3 // 尝试连接的总数
 	messageInterval = 1 * time.Second
 	authToken       = "your-auth-token-here" // 替换为实际的认证令牌
@@ -42,7 +46,8 @@ var mutex sync.Mutex
 func main() {
 	// 尝试创建多个客户端连接
 	for i := 0; i < numConnections; i++ {
-		client, err := connectWebSocket()
+		client, err := connectWebSocket(wsServerURL) // 使用 WS
+		// client, err := connectWebSocket(wssServerURL) // 使用 WSS
 		if err != nil {
 			log.Printf("Failed to connect client %d: %v", i, err)
 			continue
@@ -64,9 +69,9 @@ func main() {
 	}
 }
 
-func connectWebSocket() (*Client, error) {
+func connectWebSocket(serverURL string) (*Client, error) {
 	clientID := fmt.Sprintf("Client-%d", rand.Intn(1000))
-	u, _ := url.Parse(wsServerURL)
+	u, _ := url.Parse(serverURL)
 	q := u.Query()
 	q.Set("clientID", clientID)
 	u.RawQuery = q.Encode()
@@ -79,6 +84,7 @@ func connectWebSocket() (*Client, error) {
 	dialer := websocket.Dialer{
 		Proxy:            http.ProxyFromEnvironment,
 		HandshakeTimeout: 45 * time.Second,
+		TLSClientConfig:  &tls.Config{InsecureSkipVerify: true}, // 仅用于测试，生产环境应移除
 	}
 
 	conn, _, err := dialer.Dial(u.String(), header)
