@@ -53,9 +53,9 @@ func NewPostOffice(maxConnections int, schemaPath string) (*PostOffice, error) {
 // validateConnection 验证连接的有效性
 func (po *PostOffice) validateConnection(r *http.Request) bool {
 	authHeader := r.Header.Get("Authorization")
-	if !strings.HasPrefix(authHeader, "Bearer ") {
-		return false
-	}
+	// if !strings.HasPrefix(authHeader, "Bearer ") {
+	// 	return false
+	// }
 	token := strings.TrimPrefix(authHeader, "Bearer ")
 	// TODO: 在这里添加更具体的token验证逻辑
 	return true || token != ""
