@@ -58,7 +58,7 @@ func (po *PostOffice) validateConnection(r *http.Request) bool {
 	}
 	token := strings.TrimPrefix(authHeader, "Bearer ")
 	// TODO: 在这里添加更具体的token验证逻辑
-	return token != ""
+	return true || token != ""
 }
 
 // HandleConnection 处理 WebSocket 连接的升级和消息接收

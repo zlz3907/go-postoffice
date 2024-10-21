@@ -18,9 +18,9 @@ import (
 )
 
 const (
-	wsServerURL     = "ws://localhost:7502"  // 使用本地地址进行测试
-	wssServerURL    = "wss://localhost:7503" // WSS URL，如果配置了SSL
-	numConnections  = 3                      // 尝试连接的总数
+	wsServerURL     = "ws://socket.zhycit.com" // 使用本地地址进行测试
+	wssServerURL    = "wss://localhost:7503"   // WSS URL，如果配置了SSL
+	numConnections  = 3                        // 尝试连接的总数
 	messageInterval = 1 * time.Second
 	authToken       = "your-auth-token-here" // 替换为实际的认证令牌
 )
@@ -121,7 +121,7 @@ func sendMessageToAll(sender *Client) {
 	content := fmt.Sprintf("Hello from %s at %s", sender.ID, time.Now().Format(time.RFC3339))
 	message := Message{
 		From:    sender.ID,
-		To:      recipients,
+		To:      append(recipients, "1234567890"),
 		Subject: "Test Message",
 		Content: content,
 		Type:    "msg", // 使用字符串类型的消息类型
