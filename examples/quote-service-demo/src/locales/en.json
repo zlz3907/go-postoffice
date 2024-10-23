@@ -1,0 +1,49 @@
+{
+  "title": "Quote Service Integration Guide",
+  "step0": {
+    "title": "Step 0: Configure Connection Information",
+    "serverUrl": "WSS Server Address",
+    "appId": "App ID",
+    "secret": "Secret",
+    "getToken": "Get Token"
+  },
+  "step1": {
+    "title": "Step 1: Connect to Server",
+    "connect": "Connect to Server"
+  },
+  "step2": {
+    "title": "Step 2: Send Quote Request",
+    "productInput": "Enter Product Name",
+    "requestQuote": "Request Quote"
+  },
+  "messages": "Received Messages",
+  "fullscreen": "Fullscreen",
+  "exitFullscreen": "Exit Fullscreen",
+  "tokenInfo": {
+    "title": "Authorization Token",
+    "expiresDate": "Expiration Date",
+    "ttl": "TTL"
+  },
+  "copyToken": "Copy Token",
+  "seconds": "seconds",
+  "documentation": {
+    "title": "API Documentation",
+    "requestExample": "Request Example:",
+    "responseExample": "Response Example:",
+    "steps": [
+      {
+        "title": "Step 0: Get Token",
+        "description": "Obtain an authorization token using appid and secret."
+      },
+      {
+        "title": "Step 1: Connect to WebSocket Server",
+        "description": "Connect to the WebSocket server using the obtained token."
+      },
+      {
+        "title": "Step 2: Send Quote Request",
+        "description": "Send a product quote request to the server."
+      }
+    ]
+  },
+  "copyCode": "Copy code"
+}

@@ -25,7 +25,7 @@
 
 ## 3. Preparation
    - Obtaining necessary credentials
-     - WebSocket server URL, for enterprise version `GO-POSTOFFICE` server, the URL is: `wss://socket.zhycit.com/`. Users can set up their own server, refer to the documentation: [GO-POSTOFFICE Documentation](https://github.com/zhycit/GO-POSTOFFICE)
+     - WebSocket server URL, for enterprise version `GO-POSTOFFICE` server, the URL is: `wss://socket.zhycit.com/`. Users can set up their own server, refer to the documentation: [GO-POSTOFFICE Documentation](https://github.com/zlz3907/GO-POSTOFFICE)
      - Authorization token (required for enterprise version)
 
        Use the following API to obtain the authorization token:

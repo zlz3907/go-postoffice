@@ -1,0 +1,49 @@
+{
+  "title": "باھا مۇلازىمىتى ئۇلىنىش كۆرسەتمىسى",
+  "step0": {
+    "title": "قەدەم 0: ئۇلىنىش ئۇچۇرلىرىنى تەڭشەش",
+    "serverUrl": "WSS مۇلازىمېتىر ئادرېسى",
+    "appId": "App ID",
+    "secret": "Secret",
+    "getToken": "Token ئېلىش"
+  },
+  "step1": {
+    "title": "قەدەم 1: مۇلازىمېتىرغا ئۇلىنىش",
+    "connect": "مۇلازىمېتىرغا ئۇلىنىش"
+  },
+  "step2": {
+    "title": "قەدەم 2: باھا تەلىپى يوللاش",
+    "productInput": "مەھسۇلات ئىسمىنى كىرگۈزۈڭ",
+    "requestQuote": "باھا تەلەپ قىلىش"
+  },
+  "messages": "تاپشۇرۇۋالغان ئۇچۇرلار",
+  "fullscreen": "تولۇق ئېكران",
+  "exitFullscreen": "تولۇق ئېكراندىن چېكىنىش",
+  "tokenInfo": {
+    "title": "ھوقۇق Token",
+    "expiresDate": "ئاخىرلىشىش ۋاقتى",
+    "ttl": "TTL"
+  },
+  "copyToken": "Token كۆچۈرۈش",
+  "seconds": "سېكۇنت",
+  "documentation": {
+    "title": "API ھۆججىتى",
+    "requestExample": "ئىلتىماس مىسالى:",
+    "responseExample": "جاۋاب مىسالى:",
+    "steps": [
+      {
+        "title": "قەدەم 0: Token ئېلىش",
+        "description": "App ID ۋە Secret ئارقىلىق ھوقۇق Token ئېلىش."
+      },
+      {
+        "title": "قەدەم 1: WebSocket مۇلازىمېتىرىغا ئۇلىنىش",
+        "description": "ئالغان Token نى ئىشلىتىپ WebSocket مۇلازىمېتىرىغا ئۇلىنىش."
+      },
+      {
+        "title": "قەدەم 2: باھا تەلىپى يوللاش",
+        "description": "مۇلازىمېتىرغا مەھسۇلات باھا تەلىپىنى يوللاش."
+      }
+    ]
+  },
+  "copyCode": "كودنى كۆچۈرۈش"
+}

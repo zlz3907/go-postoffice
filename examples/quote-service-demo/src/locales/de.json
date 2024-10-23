@@ -1,0 +1,49 @@
+{
+  "title": "Anleitung zur Integration des Angebotsdienstes",
+  "step0": {
+    "title": "Schritt 0: Verbindungsinformationen konfigurieren",
+    "serverUrl": "WSS-Serveradresse",
+    "appId": "App ID",
+    "secret": "Secret",
+    "getToken": "Token abrufen"
+  },
+  "step1": {
+    "title": "Schritt 1: Mit Server verbinden",
+    "connect": "Mit Server verbinden"
+  },
+  "step2": {
+    "title": "Schritt 2: Angebotsanfrage senden",
+    "productInput": "Produktname eingeben",
+    "requestQuote": "Angebot anfordern"
+  },
+  "messages": "Empfangene Nachrichten",
+  "fullscreen": "Vollbild",
+  "exitFullscreen": "Vollbild beenden",
+  "tokenInfo": {
+    "title": "Autorisierungstoken",
+    "expiresDate": "Ablaufdatum",
+    "ttl": "TTL"
+  },
+  "copyToken": "Token kopieren",
+  "seconds": "Sekunden",
+  "documentation": {
+    "title": "API-Dokumentation",
+    "requestExample": "Anfragebeispiel:",
+    "responseExample": "Antwortbeispiel:",
+    "steps": [
+      {
+        "title": "Schritt 0: Token abrufen",
+        "description": "Erhalten Sie ein Autorisierungstoken mit appid und secret."
+      },
+      {
+        "title": "Schritt 1: Mit WebSocket-Server verbinden",
+        "description": "Verbinden Sie sich mit dem WebSocket-Server unter Verwendung des erhaltenen Tokens."
+      },
+      {
+        "title": "Schritt 2: Angebotsanfrage senden",
+        "description": "Senden Sie eine Produktangebotsanfrage an den Server."
+      }
+    ]
+  },
+  "copyCode": "Code kopieren"
+}

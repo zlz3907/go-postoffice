@@ -1,0 +1,49 @@
+{
+  "title": "Guide d'intégration du service de devis",
+  "step0": {
+    "title": "Étape 0 : Configurer les informations de connexion",
+    "serverUrl": "Adresse du serveur WSS",
+    "appId": "App ID",
+    "secret": "Secret",
+    "getToken": "Obtenir le token"
+  },
+  "step1": {
+    "title": "Étape 1 : Se connecter au serveur",
+    "connect": "Se connecter au serveur"
+  },
+  "step2": {
+    "title": "Étape 2 : Envoyer une demande de devis",
+    "productInput": "Entrer le nom du produit",
+    "requestQuote": "Demander un devis"
+  },
+  "messages": "Messages reçus",
+  "fullscreen": "Plein écran",
+  "exitFullscreen": "Quitter le plein écran",
+  "tokenInfo": {
+    "title": "Token d'autorisation",
+    "expiresDate": "Date d'expiration",
+    "ttl": "TTL"
+  },
+  "copyToken": "Copier le token",
+  "seconds": "secondes",
+  "documentation": {
+    "title": "Documentation de l'API",
+    "requestExample": "Exemple de requête :",
+    "responseExample": "Exemple de réponse :",
+    "steps": [
+      {
+        "title": "Étape 0 : Obtenir le token",
+        "description": "Obtenez un token d'autorisation en utilisant appid et secret."
+      },
+      {
+        "title": "Étape 1 : Se connecter au serveur WebSocket",
+        "description": "Connectez-vous au serveur WebSocket en utilisant le token obtenu."
+      },
+      {
+        "title": "Étape 2 : Envoyer une demande de devis",
+        "description": "Envoyez une demande de devis de produit au serveur."
+      }
+    ]
+  },
+  "copyCode": "Copier le code"
+}

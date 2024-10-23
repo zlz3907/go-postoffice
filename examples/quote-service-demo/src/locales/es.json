@@ -1,0 +1,49 @@
+{
+  "title": "Guía de integración del servicio de cotización",
+  "step0": {
+    "title": "Paso 0: Configurar información de conexión",
+    "serverUrl": "Dirección del servidor WSS",
+    "appId": "App ID",
+    "secret": "Secret",
+    "getToken": "Obtener Token"
+  },
+  "step1": {
+    "title": "Paso 1: Conectar al servidor",
+    "connect": "Conectar al servidor"
+  },
+  "step2": {
+    "title": "Paso 2: Enviar solicitud de cotización",
+    "productInput": "Ingresar nombre del producto",
+    "requestQuote": "Solicitar cotización"
+  },
+  "messages": "Mensajes recibidos",
+  "fullscreen": "Pantalla completa",
+  "exitFullscreen": "Salir de pantalla completa",
+  "tokenInfo": {
+    "title": "Token de autorización",
+    "expiresDate": "Fecha de expiración",
+    "ttl": "TTL"
+  },
+  "copyToken": "Copiar Token",
+  "seconds": "segundos",
+  "documentation": {
+    "title": "Documentación de la API",
+    "requestExample": "Ejemplo de solicitud:",
+    "responseExample": "Ejemplo de respuesta:",
+    "steps": [
+      {
+        "title": "Paso 0: Obtener Token",
+        "description": "Obtenga un token de autorización usando appid y secret."
+      },
+      {
+        "title": "Paso 1: Conectar al servidor WebSocket",
+        "description": "Conéctese al servidor WebSocket usando el token obtenido."
+      },
+      {
+        "title": "Paso 2: Enviar solicitud de cotización",
+        "description": "Envíe una solicitud de cotización de producto al servidor."
+      }
+    ]
+  },
+  "copyCode": "Copiar código"
+}

@@ -1,0 +1,49 @@
+{
+  "title": "ຄູ່ມືການເຊື່ອມຕໍ່ບໍລິການໃບລາຄາ",
+  "step0": {
+    "title": "ຂັ້ນຕອນ 0: ກຳນົດຄ່າຂໍ້ມູນການເຊື່ອມຕໍ່",
+    "serverUrl": "ທີ່ຢູ່ເຊີເວີ WSS",
+    "appId": "App ID",
+    "secret": "Secret",
+    "getToken": "ຮັບ Token"
+  },
+  "step1": {
+    "title": "ຂັ້ນຕອນ 1: ເຊື່ອມຕໍ່ກັບເຊີເວີ",
+    "connect": "ເຊື່ອມຕໍ່ກັບເຊີເວີ"
+  },
+  "step2": {
+    "title": "ຂັ້ນຕອນ 2: ສົ່ງຄຳຂໍໃບລາຄາ",
+    "productInput": "ປ້ອນຊື່ຜະລິດຕະພັນ",
+    "requestQuote": "ຂໍໃບລາຄາ"
+  },
+  "messages": "ຂໍ້ຄວາມທີ່ໄດ້ຮັບ",
+  "fullscreen": "ເຕັມຈໍ",
+  "exitFullscreen": "ອອກຈາກເຕັມຈໍ",
+  "tokenInfo": {
+    "title": "Token ອະນຸຍາດ",
+    "expiresDate": "ວັນໝົດອາຍຸ",
+    "ttl": "TTL"
+  },
+  "copyToken": "ຄັດລອກ Token",
+  "seconds": "ວິນາທີ",
+  "documentation": {
+    "title": "ເອກະສານ API",
+    "requestExample": "ຕົວຢ່າງຄຳຂໍ:",
+    "responseExample": "ຕົວຢ່າງການຕອບກັບ:",
+    "steps": [
+      {
+        "title": "ຂັ້ນຕອນ 0: ຮັບ Token",
+        "description": "ຮັບ token ອະນຸຍາດໂດຍໃຊ້ appid ແລະ secret."
+      },
+      {
+        "title": "ຂັ້ນຕອນ 1: ເຊື່ອມຕໍ່ກັບເຊີເວີ WebSocket",
+        "description": "ເຊື່ອມຕໍ່ກັບເຊີເວີ WebSocket ໂດຍໃຊ້ token ທີ່ໄດ້ຮັບ."
+      },
+      {
+        "title": "ຂັ້ນຕອນ 2: ສົ່ງຄຳຂໍໃບລາຄາ",
+        "description": "ສົ່ງຄຳຂໍໃບລາຄາຜະລິດຕະພັນໄປຍັງເຊີເວີ."
+      }
+    ]
+  },
+  "copyCode": "ສຳເນົາລະຫັດ"
+}

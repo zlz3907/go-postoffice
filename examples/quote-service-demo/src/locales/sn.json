@@ -1,0 +1,49 @@
+{
+  "title": "Nzira yekubatanidza Basa reQuote",
+  "step0": {
+    "title": "Danho 0: Gadzira Ruzivo rweConnection",
+    "serverUrl": "Kero yeWSS Server",
+    "appId": "App ID",
+    "secret": "Secret",
+    "getToken": "Wana Token"
+  },
+  "step1": {
+    "title": "Danho 1: Batanidza kuServer",
+    "connect": "Batanidza kuServer"
+  },
+  "step2": {
+    "title": "Danho 2: Tuma Chikumbiro cheQuote",
+    "productInput": "Isa Zita reProduct",
+    "requestQuote": "Kumbira Quote"
+  },
+  "messages": "Mharidzo Dzawanikwa",
+  "fullscreen": "Full screen",
+  "exitFullscreen": "Buda muFull screen",
+  "tokenInfo": {
+    "title": "Token yeMvumo",
+    "expiresDate": "Zuva rokuPera",
+    "ttl": "TTL"
+  },
+  "copyToken": "Kopera Token",
+  "seconds": "masekondi",
+  "documentation": {
+    "title": "Tsanangudzo yeMabatiro eAPI",
+    "requestExample": "Muenzaniso weKukumbira:",
+    "responseExample": "Muenzaniso weMhinduro:",
+    "steps": [
+      {
+        "title": "Danho 0: Kuwana Token",
+        "description": "Kuwana token yemvumo uchishandisa appid nesecret."
+      },
+      {
+        "title": "Danho 1: Kubatanidza kuWebSocket Server",
+        "description": "Kubatanidza kuWebSocket server uchishandisa token yawakawana."
+      },
+      {
+        "title": "Danho 2: Kutumira Kukumbira kweQuote",
+        "description": "Tumira kukumbira kwemutengo wechigadzirwa kuserver."
+      }
+    ]
+  },
+  "copyCode": "Kopera kodhi"
+}

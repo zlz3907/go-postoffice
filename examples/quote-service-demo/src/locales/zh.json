@@ -1,0 +1,49 @@
+{
+  "title": "报价服务对接指引",
+  "step0": {
+    "title": "步骤 0: 配置连接信息",
+    "serverUrl": "WSS 服务器地址",
+    "appId": "App ID",
+    "secret": "密钥",
+    "getToken": "获取 Token"
+  },
+  "step1": {
+    "title": "步骤 1: 连接到服务器",
+    "connect": "连接到服务器"
+  },
+  "step2": {
+    "title": "步骤 2: 发送报价请求",
+    "productInput": "输入产品名称",
+    "requestQuote": "请求报价"
+  },
+  "messages": "接收到的消息",
+  "fullscreen": "全屏显示",
+  "exitFullscreen": "退出全屏",
+  "tokenInfo": {
+    "title": "授权票据",
+    "expiresDate": "截止日期",
+    "ttl": "TTL"
+  },
+  "copyToken": "复制 Token",
+  "seconds": "秒",
+  "documentation": {
+    "title": "接口说明文档",
+    "requestExample": "请求示例：",
+    "responseExample": "响应示例：",
+    "steps": [
+      {
+        "title": "步骤 0: 获取 Token",
+        "description": "通过 appid 和 secret 获取授权 token。"
+      },
+      {
+        "title": "步骤 1: 连接到 WebSocket 服务器",
+        "description": "使用获取的 token 连接到 WebSocket 服务器。"
+      },
+      {
+        "title": "步骤 2: 发送报价请求",
+        "description": "向服务器发送产品报价请求。"
+      }
+    ]
+  },
+  "copyCode": "复制代码"
+}

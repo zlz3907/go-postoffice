@@ -10,8 +10,8 @@
 ## 2. 系统要求
    - 操作系统
      - Windows 10 或更高版本
-     - macOS 10.12 或更高版本
-     - Linux（推荐使用Ubuntu 18.04 LTS或更高版本）
+     - macOS 10.12 或更高版本（不支持WeChat）
+     - Linux（推荐使用Ubuntu 18.04 LTS或更高版本，不支持WeChat）
    
    - 配置要求
      - CPU: 双核处理器或更高
@@ -25,7 +25,7 @@
 
 ## 3. 准备工作
    - 获取必要的凭证
-     - WebSocket服务器的URL，企业版 `GO-POSTOFFICE` 服务器的URL为：`wss://socket.zhycit.com/`，用户可以自行搭建服务器，参与文档：[GO-POSTOFFICE 文档](https://github.com/zhycit/GO-POSTOFFICE)
+     - WebSocket服务器的URL，企业版 `GO-POSTOFFICE` 服务器的URL为：`wss://socket.zhycit.com/`，用户可以自行搭建服务器，参与文档：[GO-POSTOFFICE 文档](https://github.com/zlz3907/GO-POSTOFFICE)
      - 授权令牌（企业版需要）
 
        使用以下API获取授权令牌：
