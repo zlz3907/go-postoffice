@@ -3,8 +3,12 @@ import websockets
 import json
 
 async def hello():
-    uri = "ws://localhost:7502/"
-    async with websockets.connect(uri) as websocket:
+    clientID = "python-client-001"  # 设置客户端ID
+    uri = f"ws://localhost:7502/?clientID={clientID}"
+    headers = {
+        "Authorization": "Bearer your_token_here"
+    }
+    async with websockets.connect(uri, extra_headers=headers) as websocket:
         while True:
             message = {
                 "from": "python-client",

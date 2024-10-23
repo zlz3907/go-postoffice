@@ -19,8 +19,12 @@ def create_message(msg_type, to, content):
     }
 
 async def test_client():
-    uri = f"ws://{host}:{port}/"
-    async with websockets.connect(uri) as websocket:
+    clientID = "python-test-client-001"  # 设置客户端ID
+    uri = f"ws://{host}:{port}/?clientID={clientID}"
+    headers = {
+        "Authorization": "Bearer your_token_here"
+    }
+    async with websockets.connect(uri, extra_headers=headers) as websocket:
         print(f"Connected to {uri}")
 
         # 发送登录消息

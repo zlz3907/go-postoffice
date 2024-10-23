@@ -1,6 +1,9 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('ws://localhost:7502/');
+// Use URL parameters for authentication
+const token = 'your_token_here';
+const clientID = 'js-client-001'; // 设置客户端ID
+const ws = new WebSocket(`ws://localhost:7502/?token=${encodeURIComponent(token)}&clientID=${encodeURIComponent(clientID)}`);
 
 ws.on('open', function open() {
   console.log('Connected to the server');

@@ -28,8 +28,10 @@ public class JavaClient {
             }
         };
 
+        String clientID = "java-client-001"; // 设置客户端ID
         WebSocket webSocket = client.newWebSocketBuilder()
-                .buildAsync(URI.create("ws://localhost:7502/"), listener)
+                .header("Authorization", "Bearer your_token_here")
+                .buildAsync(URI.create("ws://localhost:7502/?clientID=" + clientID), listener)
                 .join();
 
         while (true) {

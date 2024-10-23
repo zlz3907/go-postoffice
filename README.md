@@ -19,19 +19,12 @@ GO-POSTOFFICE is a high-performance WebSocket server implementation based on Go,
 ## Features
 
 1. **High-performance Concurrent Processing**: Utilizes Go's goroutines and channels for efficient concurrent connection management.
-
 2. **Flexible Message Routing**: Based on the post office model, supports point-to-point and broadcast message distribution for efficient message delivery.
-
 3. **Security Authentication**: Integrates token authentication to ensure connection security.
-
 4. **Configurable Message Validation**: Supports optional JSON Schema validation to ensure message format correctness.
-
 5. **Environmental Adaptability**: Supports multi-environment configuration for easy deployment in different scenarios.
-
 6. **Graceful Service Management**: Implements graceful startup and shutdown mechanisms to ensure service stability.
-
 7. **Scalability**: Modular design for easy feature expansion and customization.
-
 8. **Real-time Communication**: Full-duplex communication based on WebSocket, supporting real-time data exchange.
 
 ### Advantages of the Post Office Model
@@ -40,6 +33,9 @@ GO-POSTOFFICE is a high-performance WebSocket server implementation based on Go,
 - **Reliability**: Message persistence and retry mechanisms ensure reliable message delivery.
 - **Extensibility**: Easy to add new message types and processing logic.
 - **Load Balancing**: Multiple "post office" instances can be implemented to increase system throughput.
+
+## Quick Start Guide for Enterprise AI Chatbot Integration
+For a detailed guide on how to quickly integrate an enterprise-level AI chatbot, please refer to our [Enterprise AI Chatbot Integration Guide](docs/enterprise_ai_chatbot_integration_guide.md).
 
 ## Installation
 

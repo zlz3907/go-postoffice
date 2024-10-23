@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/url"
+	"net/http"
 	"os"
 	"os/signal"
 	"time"
@@ -23,10 +24,15 @@ func main() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 
-	u := url.URL{Scheme: "ws", Host: "localhost:7502", Path: "/"}
+	clientID := "go-client-001" // 设置客户端ID
+	u := url.URL{Scheme: "ws", Host: "localhost:7502", Path: "/", RawQuery: "clientID=" + clientID}
 	log.Printf("connecting to %s", u.String())
 
-	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
+	// Create custom header with token
+	header := http.Header{}
+	header.Add("Authorization", "Bearer your_token_here")
+
+	c, _, err := websocket.DefaultDialer.Dial(u.String(), header)
 	if err != nil {
 		log.Fatal("dial:", err)
 	}
