@@ -1,49 +1,87 @@
 {
-  "title": "Guía de integración del servicio de cotización",
+  "title": "Guía de Integración del Servicio de Cotización",
   "step0": {
-    "title": "Paso 0: Configurar información de conexión",
-    "serverUrl": "Dirección del servidor WSS",
-    "appId": "App ID",
-    "secret": "Secret",
-    "getToken": "Obtener Token"
+    "title": "Paso 0: Configurar Información de Conexión",
+    "tokenUrl": "URL del Token",
+    "serverUrl": "Dirección del Servidor WSS",
+    "appId": "ID de la Aplicación",
+    "secret": "Secreto",
+    "getToken": "Obtener Token",
+    "gettingToken": "Obteniendo Token...",
+    "tokenSuccess": "Token obtenido con éxito",
+    "tokenError": "Error al obtener el Token, por favor verifique la información ingresada"
   },
   "step1": {
-    "title": "Paso 1: Conectar al servidor",
-    "connect": "Conectar al servidor"
+    "title": "Paso 1: Conectar al Servidor",
+    "serverUrl": "Dirección del Servidor WSS",
+    "connect": "Conectar al Servidor",
+    "tokenRequired": "Por favor, obtenga un token primero",
+    "connected": "Conectado al servidor",
+    "connectionError": "Error de conexión, por favor intente de nuevo",
+    "connectionClosed": "Conexión cerrada"
   },
   "step2": {
-    "title": "Paso 2: Enviar solicitud de cotización",
-    "productInput": "Ingresar nombre del producto",
-    "requestQuote": "Solicitar cotización"
+    "title": "Paso 2: Enviar Solicitud de Cotización",
+    "productInput": "Ingrese el Nombre del Producto",
+    "requestQuote": "Solicitar Cotización",
+    "showExamples": "Mostrar Ejemplos",
+    "attachments": "Archivos adjuntos",
+    "attachmentsPlaceholder": "Ingrese las URL de los archivos adjuntos, separe varios archivos adjuntos con espacios",
+    "invalidContentJson": "El campo de contenido no es un formato JSON válido"
   },
-  "messages": "Mensajes recibidos",
-  "fullscreen": "Pantalla completa",
-  "exitFullscreen": "Salir de pantalla completa",
+  "messages": "Mensajes Recibidos",
+  "fullscreen": "Pantalla Completa",
+  "exitFullscreen": "Salir de Pantalla Completa",
   "tokenInfo": {
-    "title": "Token de autorización",
-    "expiresDate": "Fecha de expiración",
+    "title": "Token de Autorización",
+    "expiresDate": "Fecha de Expiración",
     "ttl": "TTL"
   },
   "copyToken": "Copiar Token",
   "seconds": "segundos",
   "documentation": {
     "title": "Documentación de la API",
-    "requestExample": "Ejemplo de solicitud:",
-    "responseExample": "Ejemplo de respuesta:",
+    "requestExample": "Ejemplo de Solicitud:",
+    "responseExample": "Ejemplo de Respuesta:",
     "steps": [
       {
         "title": "Paso 0: Obtener Token",
         "description": "Obtenga un token de autorización usando appid y secret."
       },
       {
-        "title": "Paso 1: Conectar al servidor WebSocket",
+        "title": "Paso 1: Conectar al Servidor WebSocket",
         "description": "Conéctese al servidor WebSocket usando el token obtenido."
       },
       {
-        "title": "Paso 2: Enviar solicitud de cotización",
+        "title": "Paso 2: Enviar Solicitud de Cotización",
         "description": "Envíe una solicitud de cotización de producto al servidor."
       }
     ]
   },
-  "copyCode": "Copiar código"
+  "copyCode": "Copiar código",
+  "statusDisplay": {
+    "title": "Registro de Estado",
+    "clearLogs": "Limpiar Registros",
+    "fullscreen": "Pantalla Completa",
+    "exitFullscreen": "Salir de Pantalla Completa",
+    "messageReceived": "Mensaje recibido",
+    "heartbeatSent": "Latido enviado"
+  },
+  "sidebar": {
+    "title": "Panel Lateral",
+    "close": "Cerrar",
+    "toggle": "Alternar Panel Lateral",
+    "tabs": {
+      "logs": "Registros",
+      "msg-examples": "Ejemplos de Instrucciones",
+      "email-format": "Formato de Correo"
+    }
+  },
+  "fillCommandForm": "Rellenar Formulario de Comando",
+  "emailFormatDescription": "A continuación se muestran algunos ejemplos comunes de formato de mensaje. Cada ejemplo contiene diferentes campos y propósitos, que se pueden ajustar según las necesidades reales.",
+  "msgExamplesDescription": "A continuación se muestran algunos ejemplos comunes de instrucciones. Cada ejemplo demuestra diferentes tipos de instrucciones que se pueden ajustar y utilizar según las necesidades reales.",
+  "messageSent": "Mensaje enviado",
+  "messageReceived": "Mensaje recibido",
+  "expand": "Expandir",
+  "collapse": "Colapsar"
 }

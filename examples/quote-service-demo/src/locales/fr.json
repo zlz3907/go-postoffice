@@ -1,49 +1,87 @@
 {
-  "title": "Guide d'intégration du service de devis",
+  "title": "Guide d'Intégration du Service de Devis",
   "step0": {
-    "title": "Étape 0 : Configurer les informations de connexion",
-    "serverUrl": "Adresse du serveur WSS",
-    "appId": "App ID",
+    "title": "Étape 0 : Configurer les Informations de Connexion",
+    "tokenUrl": "URL du Token",
+    "serverUrl": "Adresse du Serveur WSS",
+    "appId": "ID de l'Application",
     "secret": "Secret",
-    "getToken": "Obtenir le token"
+    "getToken": "Obtenir le Token",
+    "gettingToken": "Obtention du Token...",
+    "tokenSuccess": "Token obtenu avec succès",
+    "tokenError": "Échec de l'obtention du Token, veuillez vérifier les informations saisies"
   },
   "step1": {
-    "title": "Étape 1 : Se connecter au serveur",
-    "connect": "Se connecter au serveur"
+    "title": "Étape 1 : Se Connecter au Serveur",
+    "serverUrl": "Adresse du Serveur WSS",
+    "connect": "Se Connecter au Serveur",
+    "tokenRequired": "Veuillez d'abord obtenir un token",
+    "connected": "Connecté au serveur",
+    "connectionError": "Erreur de connexion, veuillez réessayer",
+    "connectionClosed": "Connexion fermée"
   },
   "step2": {
-    "title": "Étape 2 : Envoyer une demande de devis",
-    "productInput": "Entrer le nom du produit",
-    "requestQuote": "Demander un devis"
+    "title": "Étape 2 : Envoyer une Demande de Devis",
+    "productInput": "Entrez le Nom du Produit",
+    "requestQuote": "Demander un Devis",
+    "showExamples": "Afficher les Exemples",
+    "attachments": "Pièces jointes",
+    "attachmentsPlaceholder": "Entrez les URL des pièces jointes, séparez plusieurs pièces jointes par des espaces",
+    "invalidContentJson": "Le champ de contenu n'est pas un format JSON valide"
   },
-  "messages": "Messages reçus",
-  "fullscreen": "Plein écran",
-  "exitFullscreen": "Quitter le plein écran",
+  "messages": "Messages Reçus",
+  "fullscreen": "Plein Écran",
+  "exitFullscreen": "Quitter le Plein Écran",
   "tokenInfo": {
-    "title": "Token d'autorisation",
-    "expiresDate": "Date d'expiration",
+    "title": "Token d'Autorisation",
+    "expiresDate": "Date d'Expiration",
     "ttl": "TTL"
   },
-  "copyToken": "Copier le token",
+  "copyToken": "Copier le Token",
   "seconds": "secondes",
   "documentation": {
     "title": "Documentation de l'API",
-    "requestExample": "Exemple de requête :",
-    "responseExample": "Exemple de réponse :",
+    "requestExample": "Exemple de Requête :",
+    "responseExample": "Exemple de Réponse :",
     "steps": [
       {
-        "title": "Étape 0 : Obtenir le token",
-        "description": "Obtenez un token d'autorisation en utilisant appid et secret."
+        "title": "Étape 0 : Obtenir le Token",
+        "description": "Obtenez un token d'autorisation en utilisant l'appid et le secret."
       },
       {
-        "title": "Étape 1 : Se connecter au serveur WebSocket",
+        "title": "Étape 1 : Se Connecter au Serveur WebSocket",
         "description": "Connectez-vous au serveur WebSocket en utilisant le token obtenu."
       },
       {
-        "title": "Étape 2 : Envoyer une demande de devis",
+        "title": "Étape 2 : Envoyer une Demande de Devis",
         "description": "Envoyez une demande de devis de produit au serveur."
       }
     ]
   },
-  "copyCode": "Copier le code"
+  "copyCode": "Copier le code",
+  "statusDisplay": {
+    "title": "Journal d'État",
+    "clearLogs": "Effacer les Journaux",
+    "fullscreen": "Plein Écran",
+    "exitFullscreen": "Quitter le Plein Écran",
+    "messageReceived": "Message reçu",
+    "heartbeatSent": "Battement de cœur envoyé"
+  },
+  "sidebar": {
+    "title": "Panneau Latéral",
+    "close": "Fermer",
+    "toggle": "Basculer le Panneau Latéral",
+    "tabs": {
+      "logs": "Journaux",
+      "msg-examples": "Exemples d'Instructions",
+      "email-format": "Format d'Email"
+    }
+  },
+  "fillCommandForm": "Remplir le Formulaire de Commande",
+  "emailFormatDescription": "Voici quelques exemples courants de format de message. Chaque exemple contient différents champs et objectifs, qui peuvent être ajustés en fonction des besoins réels.",
+  "msgExamplesDescription": "Voici quelques exemples courants d'instructions. Chaque exemple démontre différents types d'instructions qui peuvent être ajustées et utilisées selon les besoins réels.",
+  "messageSent": "Message envoyé",
+  "messageReceived": "Message reçu",
+  "expand": "Développer",
+  "collapse": "Réduire"
 }

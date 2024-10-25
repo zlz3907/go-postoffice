@@ -1,49 +1,108 @@
 {
-  "title": "报价服务对接指引",
+  "title": "报价服务集成指南",
   "step0": {
-    "title": "步骤 0: 配置连接信息",
+    "title": "步骤 0：配置连接信息",
+    "tokenUrl": "Token URL",
     "serverUrl": "WSS 服务器地址",
-    "appId": "App ID",
+    "appId": "应用 ID",
     "secret": "密钥",
-    "getToken": "获取 Token"
+    "getToken": "获取 Token",
+    "gettingToken": "正在获取 Token...",
+    "tokenSuccess": "Token 获取成功",
+    "tokenError": "获取 Token 失败，请检查输入信息"
   },
   "step1": {
-    "title": "步骤 1: 连接到服务器",
-    "connect": "连接到服务器"
+    "title": "步骤 1：连接服务器",
+    "serverUrl": "WSS 服务器地址",
+    "connect": "连接服务器",
+    "tokenRequired": "请先获取 Token",
+    "connected": "已连接到服务器",
+    "connectionError": "连接错误，请重试",
+    "connectionClosed": "连接已关闭"
   },
   "step2": {
-    "title": "步骤 2: 发送报价请求",
-    "productInput": "输入产品名称",
-    "requestQuote": "请求报价"
+    "title": "步骤 2：发送指令",
+    "from": "发送者",
+    "fromPlaceholder": "输入发送者ID",
+    "to": "接收者",
+    "toPlaceholder": "输入接收者ID",
+    "subject": "主题",
+    "subjectPlaceholder": "输入消息主题",
+    "content": "内容",
+    "contentPlaceholder": "输入消息内容",
+    "type": "类型",
+    "showOptional": "显示可选字段",
+    "hideOptional": "隐藏可选字段",
+    "cc": "抄送",
+    "ccPlaceholder": "输入抄送者ID",
+    "contentType": "内容类型",
+    "contentTypePlaceholder": "输入内容类型",
+    "charset": "字符集",
+    "charsetPlaceholder": "输入字符集",
+    "level": "级别",
+    "levelPlaceholder": "输入级别",
+    "tags": "标签",
+    "tagsPlaceholder": "输入标签，用逗号分隔",
+    "sendCommand": "发送指令",
+    "connectionError": "WebSocket 未连接，请先连接服务器",
+    "showExamples": "显示示例",
+    "attachments": "附件",
+    "attachmentsPlaceholder": "输入附件URL，多个附件用空格分隔",
+    "invalidContentJson": "内容字段不是有效的 JSON 格式"
   },
-  "messages": "接收到的消息",
-  "fullscreen": "全屏显示",
+  "messages": "收到的消息",
+  "fullscreen": "全屏",
   "exitFullscreen": "退出全屏",
   "tokenInfo": {
-    "title": "授权票据",
-    "expiresDate": "截止日期",
-    "ttl": "TTL"
+    "title": "授权令牌",
+    "expiresDate": "过期日期",
+    "ttl": "有效期"
   },
   "copyToken": "复制 Token",
   "seconds": "秒",
   "documentation": {
-    "title": "接口说明文档",
+    "title": "API 文档",
     "requestExample": "请求示例：",
     "responseExample": "响应示例：",
     "steps": [
       {
-        "title": "步骤 0: 获取 Token",
-        "description": "通过 appid 和 secret 获取授权 token。"
+        "title": "步骤 0：获取 Token",
+        "description": "使用 appid 和 secret 获取授权令牌。"
       },
       {
-        "title": "步骤 1: 连接到 WebSocket 服务器",
-        "description": "使用获取的 token 连接到 WebSocket 服务器。"
+        "title": "步骤 1：连接 WebSocket 服务器",
+        "description": "使用获取的令牌连接到 WebSocket 服务器。"
       },
       {
-        "title": "步骤 2: 发送报价请求",
+        "title": "步骤 2：发送报价请求",
         "description": "向服务器发送产品报价请求。"
       }
     ]
   },
-  "copyCode": "复制代码"
+  "copyCode": "复制代码",
+  "statusDisplay": {
+    "title": "状态日志",
+    "clearLogs": "清除日志",
+    "fullscreen": "全屏",
+    "exitFullscreen": "退出全屏",
+    "messageReceived": "收到消息",
+    "heartbeatSent": "已发送心跳"
+  },
+  "sidebar": {
+    "title": "侧边栏面板",
+    "close": "关闭",
+    "toggle": "切换侧边栏",
+    "tabs": {
+      "logs": "日志",
+      "msg-examples": "指令示例",
+      "email-format": "收件格式"
+    }
+  },
+  "fillCommandForm": "填充命令表单",
+  "emailFormatDescription": "以下是一些常见的消息格式示例。每个示例都包含了不同的字段和用途,可以根据实际需求进行调整。",
+  "msgExamplesDescription": "以下是一些常见的指令示例。每个示例展示了不同类型的指令,可以根据实际需求进行调整和使用。",
+  "messageSent": "发送的消息",
+  "messageReceived": "接收的消息",
+  "expand": "展开",
+  "collapse": "收起"
 }

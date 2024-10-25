@@ -2,19 +2,32 @@
   "title": "Anleitung zur Integration des Angebotsdienstes",
   "step0": {
     "title": "Schritt 0: Verbindungsinformationen konfigurieren",
+    "tokenUrl": "Token-URL",
     "serverUrl": "WSS-Serveradresse",
-    "appId": "App ID",
-    "secret": "Secret",
-    "getToken": "Token abrufen"
+    "appId": "App-ID",
+    "secret": "Geheimnis",
+    "getToken": "Token abrufen",
+    "gettingToken": "Token wird abgerufen...",
+    "tokenSuccess": "Token erfolgreich erhalten",
+    "tokenError": "Token konnte nicht abgerufen werden, bitte überprüfen Sie die Eingabeinformationen"
   },
   "step1": {
     "title": "Schritt 1: Mit Server verbinden",
-    "connect": "Mit Server verbinden"
+    "serverUrl": "WSS-Serveradresse",
+    "connect": "Mit Server verbinden",
+    "tokenRequired": "Bitte zuerst einen Token abrufen",
+    "connected": "Mit Server verbunden",
+    "connectionError": "Verbindungsfehler, bitte erneut versuchen",
+    "connectionClosed": "Verbindung geschlossen"
   },
   "step2": {
     "title": "Schritt 2: Angebotsanfrage senden",
     "productInput": "Produktname eingeben",
-    "requestQuote": "Angebot anfordern"
+    "requestQuote": "Angebot anfordern",
+    "showExamples": "Beispiele anzeigen",
+    "attachments": "Anhänge",
+    "attachmentsPlaceholder": "Geben Sie Anhang-URLs ein, trennen Sie mehrere Anhänge durch Leerzeichen",
+    "invalidContentJson": "Das Inhaltsfeld ist kein gültiges JSON-Format"
   },
   "messages": "Empfangene Nachrichten",
   "fullscreen": "Vollbild",
@@ -45,5 +58,30 @@
       }
     ]
   },
-  "copyCode": "Code kopieren"
+  "copyCode": "Code kopieren",
+  "statusDisplay": {
+    "title": "Status und Protokolle",
+    "clearLogs": "Protokolle löschen",
+    "messageReceived": "Nachricht empfangen",
+    "heartbeatSent": "Heartbeat gesendet",
+    "fullscreen": "Vollbild",
+    "exitFullscreen": "Vollbild beenden"
+  },
+  "sidebar": {
+    "title": "Seitenleiste",
+    "close": "Schließen",
+    "toggle": "Seitenleiste umschalten",
+    "tabs": {
+      "logs": "Protokolle",
+      "msg-examples": "Anweisungsbeispiele",
+      "email-format": "E-Mail-Format"
+    }
+  },
+  "fillCommandForm": "Befehlsformular ausfüllen",
+  "emailFormatDescription": "Nachfolgend finden Sie einige gängige Beispiele für Nachrichtenformate. Jedes Beispiel enthält verschiedene Felder und Zwecke, die je nach tatsächlichem Bedarf angepasst werden können.",
+  "msgExamplesDescription": "Nachfolgend finden Sie einige gängige Anweisungsbeispiele. Jedes Beispiel zeigt verschiedene Arten von Anweisungen, die je nach tatsächlichem Bedarf angepasst und verwendet werden können.",
+  "messageSent": "Gesendete Nachricht",
+  "messageReceived": "Empfangene Nachricht",
+  "expand": "Erweitern",
+  "collapse": "Einklappen"
 }

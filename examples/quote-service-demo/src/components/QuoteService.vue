@@ -1,368 +1,625 @@
 <template>
-  <div>
+  <div class="quote-service container">
+    <h1>{{ t('title') }}</h1>
+    
     <div class="step">
       <h2>{{ t('step0.title') }}</h2>
-      <div class="input-group">
-        <label for="serverUrl">{{ t('step0.serverUrl') }}</label>
-        <input id="serverUrl" v-model="serverUrl" :placeholder="t('step0.serverUrl')" />
+      <div class="form-group">
+        <label for="tokenUrl">{{ t('step0.tokenUrl') }}</label>
+        <input id="tokenUrl" v-model="tokenUrl" disabled class="form-control" />
       </div>
-      <div class="input-group">
+      <div class="form-group">
         <label for="appId">{{ t('step0.appId') }}</label>
-        <input id="appId" v-model="appId" :placeholder="t('step0.appId')" />
+        <input id="appId" v-model="appId" :placeholder="t('step0.appId')" class="form-control" @input="updateTokenUrl" />
       </div>
-      <div class="input-group">
+      <div class="form-group">
         <label for="secret">{{ t('step0.secret') }}</label>
-        <input id="secret" v-model="secret" :placeholder="t('step0.secret')" type="password" />
+        <input id="secret" v-model="secret" :placeholder="t('step0.secret')" type="password" class="form-control" @input="updateTokenUrl" />
       </div>
-      <button @click="getToken">{{ t('step0.getToken') }}</button>
-      <div>{{ tokenStatus }}</div>
-      <div v-if="tokenInfo" class="token-display">
-        <div class="token-info">
-          <span class="token-label">{{ t('tokenInfo.title') }}：</span>
-          <span class="token-value">{{ tokenInfo.token }}</span>
-        </div>
-        <div class="token-info">
-          <span class="token-label">{{ t('tokenInfo.expiresDate') }}：</span>
-          <span class="token-value">{{ tokenInfo.expiresDate }}</span>
-        </div>
-        <div class="token-info">
-          <span class="token-label">{{ t('tokenInfo.ttl') }}：</span>
-          <span class="token-value">{{ tokenInfo.ttl }}{{ t('seconds') }}</span>
-        </div>
-        <button @click="copyToken">{{ t('copyToken') }}</button>
+      <button @click="getToken" class="btn btn-primary">{{ t('step0.getToken') }}</button>
+      <div class="mt-3">{{ tokenStatus }}</div>
+      <div v-if="tokenInfo" class="mt-3 token-info">
+        <div><strong>{{ t('tokenInfo.title') }}：</strong> {{ tokenInfo.token }}</div>
+        <div><strong>{{ t('tokenInfo.expiresDate') }}：</strong> {{ tokenInfo.expiresDate }}</div>
+        <div><strong>{{ t('tokenInfo.ttl') }}：</strong> {{ tokenInfo.ttl }}{{ t('seconds') }}</div>
       </div>
     </div>
 
     <div v-if="token" class="step">
       <h2>{{ t('step1.title') }}</h2>
-      <button @click="connect">{{ t('step1.connect') }}</button>
-      <div>{{ connectionStatus }}</div>
+      <div class="form-group">
+        <label for="serverUrl">{{ t('step1.serverUrl') }}</label>
+        <input id="serverUrl" v-model="serverUrl" :placeholder="t('step1.serverUrl')" class="form-control" />
+      </div>
+      <button @click="connect" class="btn btn-primary">{{ t('step1.connect') }}</button>
+      <div class="mt-3">{{ connectionStatus }}</div>
     </div>
 
     <div v-if="isConnected" class="step">
-      <h2>{{ t('step2.title') }}</h2>
-      <input v-model="product" :placeholder="t('step2.productInput')" />
-      <button @click="requestQuote">{{ t('step2.requestQuote') }}</button>
-    </div>
+      <div class="step-header">
+        <h2>{{ t('step2.title') }}</h2>
+        <button @click="openExamplesSidebar" class="btn btn-sm btn-light show-examples-btn">
+          {{ t('step2.showExamples') }}
+        </button>
+      </div>
+      <!-- 必填项 -->
+      <div class="form-group">
+        <label for="from">{{ t('step2.from') }}</label>
+        <input id="from" v-model="message.from" :placeholder="t('step2.fromPlaceholder')" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="to">{{ t('step2.to') }}</label>
+        <input id="to" v-model="message.to" :placeholder="t('step2.toPlaceholder')" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="subject">{{ t('step2.subject') }}</label>
+        <input id="subject" v-model="message.subject" :placeholder="t('step2.subjectPlaceholder')" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="content">{{ t('step2.content') }}</label>
+        <textarea 
+          id="content" 
+          v-model="formattedContent" 
+          :placeholder="t('step2.contentPlaceholder')" 
+          class="form-control" 
+          required
+          :style="{ fontFamily: isContentObject ? 'monospace' : 'inherit' }"
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="type">{{ t('step2.type') }}</label>
+        <select id="type" v-model="message.type" class="form-control" required>
+          <option value="UPDATE_CONTACTS">更新联系人列表</option>
+          <option value="UPDATE_BOT_CONFIG">更新机器人配置</option>
+          <option value="SEND_REPLY_MSG">发送回复消息</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="attachments">{{ t('step2.attachments') }}</label>
+        <input id="attachments" v-model="message.attachments" :placeholder="t('step2.attachmentsPlaceholder')" class="form-control" />
+      </div>
 
-    <div v-if="isConnected" class="step">
-      <h2>{{ t('messages') }}</h2>
-      <div class="message-window" :class="{ 'fullscreen': isFullscreen }">
-        <div class="message-content">
-          <div v-for="(message, index) in messages" :key="index" class="message">
-            {{ message }}
-          </div>
+      <!-- 可选项展开/折叠链接 -->
+      <a @click="toggleOptionalFields" class="toggle-optional">
+        {{ showOptionalFields ? t('step2.hideOptional') : t('step2.showOptional') }}
+        <span class="arrow-icon">{{ showOptionalFields ? '▲' : '▼' }}</span>
+      </a>
+
+      <!-- 可选项 -->
+      <div v-if="showOptionalFields" class="optional-fields">
+        <div class="form-group">
+          <label for="cc">{{ t('step2.cc') }}</label>
+          <input id="cc" v-model="message.cc" :placeholder="t('step2.ccPlaceholder')" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="contentType">{{ t('step2.contentType') }}</label>
+          <input id="contentType" v-model="message.contentType" type="number" :placeholder="t('step2.contentTypePlaceholder')" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="charset">{{ t('step2.charset') }}</label>
+          <input id="charset" v-model="message.charset" :placeholder="t('step2.charsetPlaceholder')" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="level">{{ t('step2.level') }}</label>
+          <input id="level" v-model="message.level" type="number" :placeholder="t('step2.levelPlaceholder')" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="tags">{{ t('step2.tags') }}</label>
+          <input id="tags" v-model="message.tags" :placeholder="t('step2.tagsPlaceholder')" class="form-control" />
         </div>
       </div>
-      <button @click="toggleFullscreen" class="fullscreen-toggle">
-        {{ isFullscreen ? t('exitFullscreen') : t('fullscreen') }}
-      </button>
+
+      <!-- 发送指令按钮 -->
+      <div class="send-message-container">
+        <button @click="sendMessage" class="btn btn-primary">{{ t('step2.sendCommand') }}</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { ref, computed, onMounted, reactive, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import commandExamples from '../command-examples.json'
 
 export default {
   name: 'QuoteService',
-  setup() {
-    const { t } = useI18n()
-    return { t }
+  props: {
+    // ... props 保持不变 ...
+  },
+  emits: ['update:connectionStatus', 'addLog', 'open-sidebar', 'connection-status-change', 'add-log'],
+  setup(props, { emit }) {
+    const { t, locale } = useI18n()
+    const showOptionalFields = ref(false)
+    const message = reactive({
+      from: '',
+      to: '',
+      subject: '',
+      content: '', // 将 content 初始化为空字符串
+      type: 'msg',
+      cc: '',
+      contentType: null,
+      charset: '',
+      level: 0,
+      tags: [],
+      attachments: '',
+    })
+
+    const isContentObject = ref(false)
+
+    const formattedContent = computed({
+      get: () => {
+        if (isContentObject.value) {
+          return JSON.stringify(message.content, null, 2)
+        }
+        return message.content
+      },
+      set: (value) => {
+        try {
+          const parsed = JSON.parse(value)
+          message.content = parsed
+          isContentObject.value = true
+        } catch (e) {
+          message.content = value
+          isContentObject.value = false
+        }
+      }
+    })
+
+    const token = ref('')
+    const serverUrl = ref('wss://socket.zhycit.com/')
+    const appId = ref('test_app_quote_01')
+    const secret = ref('')
+    const tokenUrl = ref('')
+    const tokenStatus = ref('')
+    const connectionStatus = ref(false)
+    const isConnected = ref(false)
+    const socket = ref(null)
+    const CLIENT_ID = '/service/erp/company/001'
+    const tokenInfo = ref(null)
+    const isHeartbeating = ref(false)
+    let heartbeatInterval = null
+
+    const toggleOptionalFields = () => {
+      showOptionalFields.value = !showOptionalFields.value
+    }
+
+    const openExamplesSidebar = () => {
+      console.log('Opening examples sidebar'); // 添加日志
+      emit('open-sidebar', 'msg-examples');
+    }
+
+    const updateTokenUrl = () => {
+      tokenUrl.value = `/wecom/token?appid=${appId.value}&secret=${secret.value}`;
+    }
+
+    const getToken = async () => {
+      tokenStatus.value = t('step0.gettingToken');
+      try {
+        const response = await fetch(tokenUrl.value);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.token) {
+          token.value = data.token;
+          tokenInfo.value = {
+            token: data.token,
+            expiresDate: new Date(data.expires).toLocaleString(),
+            ttl: data.ttl
+          };
+          tokenStatus.value = t('step0.tokenSuccess');
+        } else {
+          throw new Error('Token not found in response');
+        }
+      } catch (error) {
+        console.error('Error fetching token:', error);
+        tokenStatus.value = t('step0.tokenError');
+      }
+    }
+
+    const connect = () => {
+      if (!token.value) {
+        alert(t('step1.tokenRequired'));
+        return;
+      }
+
+      const secureUrl = serverUrl.value.replace('ws://', 'wss://');
+      socket.value = new WebSocket(`${secureUrl}?clientID=${CLIENT_ID}&token=${token.value}`);
+
+      socket.value.onopen = (event) => {
+        console.log("WebSocket 连接已建立");
+        connectionStatus.value = t('step1.connected');
+        isConnected.value = true;
+        emit('connection-status-change', true, false);
+        startHeartbeat();
+        addLog(t('step1.connected'), 'success');
+      };
+
+      socket.value.onmessage = (event) => {
+        console.log("收到消息:", event.data);
+        addLog(event.data, 'message', 'received');
+      };
+
+      socket.value.onerror = (error) => {
+        console.error("WebSocket 错误:", error);
+        connectionStatus.value = t('step1.connectionError');
+        isConnected.value = false;
+      };
+
+      socket.value.onclose = (event) => {
+        console.log("WebSocket 连接已关闭");
+        connectionStatus.value = t('step1.connectionClosed');
+        isConnected.value = false;
+        emit('connection-status-change', false, false);
+        stopHeartbeat();
+      };
+    };
+
+    const startHeartbeat = () => {
+      console.log("开始心跳");
+      heartbeatInterval = setInterval(() => {
+        sendHeartbeat();
+      }, 25000);
+      sendHeartbeat();
+    }
+
+    const stopHeartbeat = () => {
+      console.log("停止心跳");
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval);
+        heartbeatInterval = null;
+      }
+      isHeartbeating.value = false;
+      emit('connection-status-change', isConnected.value, false);
+    }
+
+    const sendHeartbeat = () => {
+      console.log("发送心跳");
+      if (socket.value && socket.value.readyState === WebSocket.OPEN) {
+        const heartbeatMessage = {
+          from: CLIENT_ID,
+          to: "AI_CHATBOT",
+          subject: "Heartbeat",
+          content: "Keep-Alive",
+          type: "heartbeat",
+          createTime: Date.now()
+        };
+        socket.value.send(JSON.stringify(heartbeatMessage));
+        isHeartbeating.value = true;
+        emit('connection-status-change', true, true);
+        
+        setTimeout(() => {
+          isHeartbeating.value = false;
+          emit('connection-status-change', true, false);
+        }, 1000);
+      }
+    }
+
+    const updateMessageContent = () => {
+      try {
+        message.content = JSON.parse(formattedContent.value)
+      } catch (error) {
+        console.error('Invalid JSON:', error)
+        // 可以在这里添加错误处理，比如显示错误消息给用户
+      }
+    }
+
+    const sendMessage = () => {
+      if (socket.value && socket.value.readyState === WebSocket.OPEN) {
+        // 移除所有空值或未定义的字段
+        const cleanMessage = Object.fromEntries(
+          Object.entries(message).filter(([_, v]) => v != null && v !== '')
+        )
+        
+        // ��需要额外处理 content 字段，因为已经是正确的格式了
+        
+        socket.value.send(JSON.stringify(cleanMessage))
+        console.log("指令已发送:", cleanMessage)
+        addLog(JSON.stringify(cleanMessage), 'message', 'sent')
+        // 重置表单
+        Object.keys(message).forEach(key => {
+          if (key === 'content') {
+            message[key] = isContentObject.value ? {} : ''
+          } else {
+            message[key] = ''
+          }
+        })
+        isContentObject.value = false
+        message.from = CLIENT_ID
+        message.type = 'msg'
+      } else {
+        console.error("WebSocket is not connected")
+        alert(t('step2.connectionError'))
+        addLog(t('step2.connectionError'), 'error')
+      }
+    }
+
+    const addLog = (message, type, direction = 'system') => {
+      const timestamp = new Date().toISOString() // 使用 ISO 格式的时间戳
+      emit('add-log', { timestamp, message, type, direction })
+    };
+
+    const fillCommandForm = (example) => {
+      Object.keys(message).forEach(key => {
+        if (example.hasOwnProperty(key)) {
+          if (key === 'content') {
+            if (typeof example[key] === 'object') {
+              message[key] = example[key] // 直接赋值对象，不转换为字符串
+              isContentObject.value = true
+            } else {
+              message[key] = example[key]
+              isContentObject.value = false
+            }
+          } else {
+            message[key] = example[key]
+          }
+        }
+      })
+    }
+
+    onMounted(() => {
+      updateTokenUrl();
+      locale.value = 'zh'
+    })
+
+    onUnmounted(() => {
+      stopHeartbeat();
+      if (socket.value) {
+        socket.value.close();
+      }
+    })
+
+    return {
+      t,
+      locale,
+      showOptionalFields,
+      message,
+      toggleOptionalFields,
+      openExamplesSidebar,
+      commandExamples,
+      fillCommandForm,
+      connect,
+      addLog,
+      token,
+      serverUrl,
+      appId,
+      secret,
+      tokenUrl,
+      tokenStatus,
+      connectionStatus,
+      isConnected,
+      socket,
+      CLIENT_ID,
+      tokenInfo,
+      isHeartbeating,
+      updateTokenUrl,
+      getToken,
+      sendMessage,
+      formattedContent,
+      updateMessageContent,
+      stopHeartbeat, // 添加这行，将 stopHeartbeat 函数暴露给组件实例
+      isContentObject, // 添加这行
+    }
   },
   data() {
     return {
-      serverUrl: 'wss://socket.zhycit.com/',
-      appId: 'test_app_quote_01', // 更新默认值
-      secret: '',
-      token: '',
-      tokenStatus: '',
-      connectionStatus: '',
-      isConnected: false,
       product: '',
       quoteResult: '',
-      socket: null,
-      CLIENT_ID: '/service/demo/quote_1',
-      tokenInfo: null,
-      messages: [],
-      isFullscreen: false,
     }
   },
-  methods: {
-    async getToken() {
-      console.log("getToken 函数被调用");
-      if (!this.serverUrl || !this.appId || !this.secret) {
-        alert("请填写所有必要的信息");
-        return;
-      }
-
-      try {
-        const response = await fetch(`/api/wecom/token?appid=${this.appId}&secret=${this.secret}`);
-        const data = await response.json();
-        this.handleTokenResponse(data);
-      } catch (error) {
-        console.error('获取 Token 失败:', error);
-        this.tokenStatus = "获取 Token 失败，请检查输入信息";
-      }
-    },
-    handleTokenResponse(response) {
-      console.log("handleTokenResponse 被调用", response);
-      if (response && response.token) {
-        this.token = response.token;
-        this.tokenStatus = "Token 获取成功";
-        
-        // 解析并格式化 token 信息
-        const expiresDate = new Date(response.expires);
-        this.tokenInfo = {
-          token: response.token,
-          expiresDate: this.formatDate(expiresDate),
-          ttl: response.ttl
-        };
-      } else {
-        console.error('获取 Token 失败:', response);
-        this.tokenStatus = "获取 Token 失败，请检查输入信息";
-        this.token = ''; // 清除之前的 token
-        this.tokenInfo = null;
-      }
-    },
-    formatDate(date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
-      
-      return `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
-    },
-    copyToken() {
-      if (this.tokenInfo) {
-        navigator.clipboard.writeText(this.tokenInfo.token).then(() => {
-          alert('Token 已复制到剪贴板');
-        }, (err) => {
-          console.error('无法复制 Token: ', err);
-          alert('复制 Token 失败，请手动复制');
-        });
-      }
-    },
-    connect() {
-      console.log("connect 函数被调用");
-      if (!this.token) {
-        alert("请先获取 Token");
-        return;
-      }
-
-      const secureUrl = this.serverUrl.replace('ws://', 'wss://');
-      
-      this.socket = new WebSocket(`${secureUrl}?clientID=${this.CLIENT_ID}&token=${this.token}`);
-
-      this.socket.onopen = (event) => {
-        console.log("WebSocket 连接已建立");
-        this.connectionStatus = "已连接到服务器";
-        this.isConnected = true;
-      };
-
-      this.socket.onmessage = (event) => {
-        console.log("收到消息:", event.data);
-        try {
-          const response = JSON.parse(event.data);
-          this.handleResponse(response);
-        } catch (error) {
-          console.error("解析消息失败:", error);
-        }
-      };
-
-      this.socket.onerror = (error) => {
-        console.error("WebSocket 错误:", error);
-        this.connectionStatus = "连接错误，请重试";
-        this.isConnected = false;
-      };
-
-      this.socket.onclose = (event) => {
-        console.log("WebSocket 连接已关闭");
-        this.connectionStatus = "连接已关闭";
-        this.isConnected = false;
-      };
-    },
-    requestQuote() {
-      console.log("requestQuote 函数被调用");
-      if (!this.product) {
-        alert("请输入产品名称");
-        return;
-      }
-
-      const message = {
-        from: this.CLIENT_ID,
-        to: "AI_CHATBOT",
-        subject: "报价请求",
-        content: `请为${this.product}提供报价`,
-        type: "msg",
-        createTime: Date.now()
-      };
-
-      if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-        this.socket.send(JSON.stringify(message));
-      } else {
-        alert("WebSocket 连接未建立，请先连接到服务器");
-      }
-    },
-    handleResponse(response) {
-      console.log("handleResponse 函数被调用", response);
-      this.messages.push(JSON.stringify(response, null, 2));
-    },
-    toggleFullscreen() {
-      this.isFullscreen = !this.isFullscreen;
-    }
-  }
+  created() {
+    this.updateTokenUrl();
+  },
 }
 </script>
 
 <style scoped>
-.step {
-  margin-bottom: 25px;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.step h2 {
-  color: #3498db;
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 1.2em;
-}
-
-.input-group {
-  position: relative;
-  margin-bottom: 15px;
-}
-
-.input-group label {
-  position: absolute;
-  top: -8px;
-  left: 10px;
-  font-size: 0.7em;
-  color: #7f8c8d;
-  background-color: #ffffff;
-  padding: 0 5px;
-}
-
-input, button {
-  margin: 8px 0;
+.quote-service {
+  max-width: 600px;
+  margin: 0 auto;
   padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #bdc3c7;
+}
+
+h1 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.2rem;
+  color: #444;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.step {
+  margin-bottom: 1.5rem;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
   border-radius: 4px;
+  padding: 1rem;
+  position: relative; /* 添加这行 */
 }
 
-input {
-  background-color: #ffffff;
-  color: #2c3e50;
-  padding-top: 15px; /* 为标签腾出空间 */
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-input:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+.step-header h2 {
+  margin: 0;
 }
 
-button {
-  background-color: #3498db;
-  color: white;
-  border: none;
+.show-examples-btn {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  line-height: 1;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  position: absolute;
+  top: -0.5rem;
+  left: 0.5rem;
+  padding: 0 0.25rem;
+  background-color: #fff;
+  color: #666;
+  font-size: 0.75rem;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* 为 tokenUrl 和 secret 文本框添加淡背景色 */
+#tokenUrl,
+#secret {
+  background-color: #f8f9fa; /* 设置为淡灰色 */
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+select.form-control {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%23343a40' d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' transform='rotate(90 4 4)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 8px 10px;
+  padding-right: 1.5rem;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.toggle-optional {
+  display: inline-block;
+  color: #6c757d;
   cursor: pointer;
-  transition: background-color 0.3s;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  font-size: 0.9rem;
 }
 
-button:hover {
-  background-color: #2980b9;
+.toggle-optional:hover {
+  text-decoration: underline;
 }
 
-.token-display {
-  margin: 15px 0;
-  padding: 15px;
+.arrow-icon {
+  margin-left: 5px;
+  font-size: 0.8rem;
+}
+
+.optional-fields {
   background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .token-info {
-  display: flex;
-  justify-content: flex-start; /* 改为左对齐 */
-  margin-bottom: 8px;
-  font-size: 0.9em;
-  color: #6c757d;
-}
-
-.token-label {
-  flex: 0 0 90px;
-  text-align: right;
-  padding-right: 10px;
-  font-weight: 600;
-}
-
-.token-value {
-  flex: 1;
-  text-align: left;
-  word-break: break-all;
-  font-family: 'Courier New', Courier, monospace;
-  padding-left: 10px; /* 添加左侧内边距 */
-}
-
-.token-display button {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 10px;
-  font-size: 0.9em;
-  width: auto;
-}
-
-.token-display button:hover {
-  background-color: #5a6268;
-}
-
-.message-window {
-  height: 300px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-top: 10px;
   background-color: #f8f9fa;
-  transition: all 0.3s ease;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  text-align: left; /* 添加这行来确保文本左对 */
 }
 
-.message-window.fullscreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1000;
+.token-info div {
+  margin-bottom: 0.25rem;
+  display: flex; /* 使用 flex 布局 */
+  align-items: flex-start; /* 顶部对齐 */
 }
 
-.message {
-  margin-bottom: 10px;
-  padding: 5px;
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+.token-info strong {
+  min-width: 80px; /* 为标签设置最小宽度 */
+  margin-right: 10px; /* 在标签和值之间添加一些间距 */
 }
 
-.fullscreen-toggle {
-  margin-top: 10px;
-  background-color: #34495e;
+.send-message-container {
+  margin-top: 1rem;
+  text-align: center;
 }
 
-.fullscreen-toggle:hover {
-  background-color: #2c3e50;
+.send-message-container .btn {
+  width: 100%;
+  max-width: 200px;
+}
+
+.mr-3 {
+  margin-right: 1rem;
+}
+
+textarea {
+  white-space: pre-wrap;
+  min-height: 100px;
 }
 </style>
+
+
+
+
+
+
+

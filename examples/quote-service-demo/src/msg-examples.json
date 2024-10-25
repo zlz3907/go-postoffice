@@ -1,0 +1,106 @@
+[
+    {
+        "desc": "微信登录",
+        "example": {
+            "from": "/bot/wx/company/001",
+            "to": [
+                "/service/erp/company/001"
+            ],
+            "subjectId": "wxid_5nnclbd2gf6222",
+            "contentType": "text/plain",
+            "type": "wxLogin",
+            "references": "agent-001",
+            "content": {
+                "wxid": "wxid_5nnclbd2gf6222",
+                "name": "\u674e\u5148\u68ee",
+                "mobile": "15701306913"
+            }
+        }
+    },
+    {
+        "desc": "转发微信消息",
+        "example": {
+            "from": "/bot/wx/company/001",
+            "to": [
+                "/service/erp/company/001"
+            ],
+            "subjectId": "4602483087127334272",
+            "contentType": "text/plain",
+            "type": "FORWARD_WX_MSG",
+            "references": "agent-001",
+            "content": "12345",
+            "subject": "wxid_i29lpfsuplp322-18913221022@chatroom",
+            "attachments": [
+                {
+                    "_is_self": false,
+                    "_is_group": true,
+                    "type": 1,
+                    "id": 4602483087127334272,
+                    "ts": 1729761153,
+                    "sign": "421295b9349319afc46d863f9a54a2f9",
+                    "xml": "<msgsource>\n    <alnode>\n        <cf>2</cf>\n    </alnode>\n    <pua>1</pua>\n    <silence>0</silence>\n    <membercount>10</membercount>\n    <signature>V1_G+0gtUQ/|v1_G+0gtUQ/</signature>\n    <tmp_node>\n        <publisher-id />\n    </tmp_node>\n    <sec_msg_node>\n        <alnode>\n            <fr>1</fr>\n        </alnode>\n    </sec_msg_node>\n</msgsource>\n",
+                    "sender": "wxid_i29lpfsuplp322",
+                    "roomid": "18913221022@chatroom",
+                    "content": "12345",
+                    "thumb": "",
+                    "extra": ""
+                }
+            ]
+        }
+    },
+    {
+        "desc": "微信联系人",
+        "example": {
+            "from": "/bot/wx/company/001",
+            "to": [
+                "/service/erp/company/001"
+            ],
+            "subjectId": "1729825800",
+            "contentType": "text/plain",
+            "type": "FORWARD_WX_CONTACTS",
+            "references": "agent-001",
+            "content": [
+                {
+                    "wxid": "wxid_i29lpfsuplp322",
+                    "code": "LK_LYC_MY",
+                    "remark": "Lkui",
+                    "name": "Lkui",
+                    "country": "CN",
+                    "province": "Beijing",
+                    "city": "",
+                    "gender": "\u7537"
+                },
+                {
+                    "wxid": "wxid_10k3fwa50vu922",
+                    "code": "cwsw21",
+                    "remark": "",
+                    "name": "ken",
+                    "country": "CN",
+                    "province": "Shanxi",
+                    "city": "Yuncheng",
+                    "gender": "\u7537"
+                },
+                {
+                    "wxid": "21025413006@chatroom",
+                    "code": "",
+                    "remark": "",
+                    "name": "\u667a\u80fd\u5ba2\u670d",
+                    "country": "",
+                    "province": "",
+                    "city": "",
+                    "gender": ""
+                },
+                {
+                    "wxid": "25984982589869741@openim",
+                    "code": "",
+                    "remark": "",
+                    "name": "LK",
+                    "country": "",
+                    "province": "",
+                    "city": "",
+                    "gender": ""
+                }
+            ]
+        }
+    }
+]

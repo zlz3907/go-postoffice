@@ -2,10 +2,14 @@
   "title": "Nzira yekubatanidza Basa reQuote",
   "step0": {
     "title": "Danho 0: Gadzira Ruzivo rweConnection",
+    "tokenUrl": "Token URL",
     "serverUrl": "Kero yeWSS Server",
     "appId": "App ID",
     "secret": "Secret",
-    "getToken": "Wana Token"
+    "getToken": "Wana Token",
+    "gettingToken": "Kuwana Token...",
+    "tokenSuccess": "Token yawanikwa",
+    "tokenError": "Takundikana kuwana Token, ndokumbira mutarise ruzivo rwamapinza"
   },
   "step1": {
     "title": "Danho 1: Batanidza kuServer",
@@ -14,7 +18,11 @@
   "step2": {
     "title": "Danho 2: Tuma Chikumbiro cheQuote",
     "productInput": "Isa Zita reProduct",
-    "requestQuote": "Kumbira Quote"
+    "requestQuote": "Kumbira Quote",
+    "showExamples": "Ratidza Mienzaniso",
+    "attachments": "Zvakabatanidzwa",
+    "attachmentsPlaceholder": "Isa ma URL ezvakabatanidzwa, paradzanisa zvakabatanidzwa zvakawanda nemapazi",
+    "invalidContentJson": "Bato rezviri mukati harisi mufambiro weJSON wakakodzera"
   },
   "messages": "Mharidzo Dzawanikwa",
   "fullscreen": "Full screen",
@@ -45,5 +53,30 @@
       }
     ]
   },
-  "copyCode": "Kopera kodhi"
+  "copyCode": "Kopera kodhi",
+  "statusDisplay": {
+    "title": "Mamiriro uye Zvinyorwa",
+    "clearLogs": "Bvisa Zvinyorwa",
+    "messageReceived": "Mharidzo yawanikwa",
+    "heartbeatSent": "Heartbeat yatumwa",
+    "fullscreen": "Full screen",
+    "exitFullscreen": "Buda muFull screen"
+  },
+  "sidebar": {
+    "title": "Bhodhi rePaRutivi",
+    "close": "Vhara",
+    "toggle": "Chinja Bhodhi rePaRutivi",
+    "tabs": {
+      "logs": "Zvinyorwa",
+      "msg-examples": "Mienzaniso yeZvirevo",
+      "email-format": "Mufambiro weEmail"
+    }
+  },
+  "fillCommandForm": "Zadza Fomu yeMurairo",
+  "emailFormatDescription": "Pasi pane mienzaniso yemamiriro emameseji akasiyana siyana. Muenzaniso wega wega une mafirdi akasiyana uye zvinangwa, zvinogona kugadziriswa maererano nezvinodikanwa chaizvo.",
+  "msgExamplesDescription": "Pasi pane mienzaniso yemirairo yakasiyana siyana. Muenzaniso wega wega unoratidza mhando dzakasiyana dzemirairo dzinogona kugadziriswa uye kushandiswa maererano nezvinodikanwa chaizvo.",
+  "messageSent": "Mharidzo yakatumwa",
+  "messageReceived": "Mharidzo yawanikwa",
+  "expand": "Kurumidza",
+  "collapse": "Pfupikisa"
 }

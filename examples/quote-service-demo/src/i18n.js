@@ -1,29 +1,31 @@
 import { createI18n } from 'vue-i18n'
-import zh from './locales/zh.json'
 import en from './locales/en.json'
-import sn from './locales/sn.json'
-import lo from './locales/lo.json'
-import ug from './locales/ug.json'
-import bo from './locales/bo.json'
+import ja from './locales/ja.json'
 import de from './locales/de.json'
-import fr from './locales/fr.json'
+import lo from './locales/lo.json'
 import es from './locales/es.json'
+import fr from './locales/fr.json'
+import bo from './locales/bo.json'
+import ug from './locales/ug.json'
+import sn from './locales/sn.json'
+import zh from './locales/zh.json'
 
-const messages = {
-  zh,
-  en,
-  sn,
-  lo,
-  ug,
-  bo,
-  de,
-  fr,
-  es
-}
-
-export const i18n = createI18n({
+const i18n = createI18n({
   legacy: false,
-  locale: 'zh',
+  locale: 'en',
   fallbackLocale: 'en',
-  messages,
+  messages: {
+    en,
+    ja,
+    de,
+    lo,
+    es,
+    fr,
+    bo,
+    ug,
+    sn,
+    zh
+  }
 })
+
+export default i18n

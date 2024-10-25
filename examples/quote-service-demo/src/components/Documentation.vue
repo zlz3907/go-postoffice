@@ -36,8 +36,9 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/atom-one-dark.css'
+import hljs from 'highlight.js/lib/core';
+import json from 'highlight.js/lib/languages/json';
+import 'highlight.js/styles/github.css'; // 更改为 GitHub 主题
 
 export default {
   name: 'Documentation',
@@ -82,7 +83,20 @@ export default {
       })
     }
 
-    return { t, highlightCode, detectLanguage, copyCode }
+    const languages = [
+      { code: 'zh', name: '中文', flag: '🇨🇳' },
+      { code: 'ug', name: 'ئۇيغۇرچە', flag: '🇨🇳' },
+      { code: 'bo', name: 'བོད་ཡིག', flag: '🇨🇳' },
+      { code: 'de', name: 'DE', flag: '🇩🇪' },
+      { code: 'en', name: 'EN', flag: '🇺🇸' },
+      { code: 'es', name: 'ES', flag: '🇪🇸' },
+      { code: 'fr', name: 'FR', flag: '🇫🇷' },
+      { code: 'lo', name: 'ລາວ', flag: '🇱🇦' },
+      { code: 'sn', name: 'SN', flag: '🇿🇼' },
+      { code: 'ja', name: '日本語', flag: '🇯🇵' }
+    ]
+
+    return { t, highlightCode, detectLanguage, copyCode, languages }
   },
   data() {
     return {
@@ -126,7 +140,8 @@ export default {
 
 <style scoped>
 .documentation {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
+  color: #24292e;
   padding: 20px;
   border-radius: 8px;
   text-align: left;
@@ -135,14 +150,13 @@ export default {
   margin-bottom: 30px;
 }
 h2, h3, h4 {
-  color: #2c3e50;
+  color: #24292e;
 }
 p {
   margin-left: 0;
 }
 .code-block {
-  position: relative;
-  background-color: #282c34;
+  background-color: #f6f8fa;
   border-radius: 6px;
   margin: 10px 0;
   overflow: hidden;
@@ -151,29 +165,28 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #21252b;
+  background-color: #f1f3f5;
   padding: 5px 10px;
-  border-bottom: 1px solid #3e4451;
+  border-bottom: 1px solid #e1e4e8;
 }
 .code-language {
-  color: #abb2bf;
+  color: #24292e;
   font-size: 0.8em;
 }
 pre {
   margin: 0;
-  padding: 12px 15px;
+  padding: 16px;
   overflow-x: auto;
 }
 code {
-  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 14px;
   line-height: 1.5;
-  color: #abb2bf; /* 默认文本颜色 */
 }
 .copy-button {
   background: transparent;
   border: none;
-  color: #abb2bf;
+  color: #586069;
   cursor: pointer;
   padding: 2px;
   transition: color 0.3s;
@@ -182,24 +195,13 @@ code {
   align-items: center;
   justify-content: center;
 }
+.copy-button:hover {
+  color: #0366d6;
+}
 .copy-button svg {
   width: 14px;
   height: 14px;
 }
-.copy-button:hover {
-  color: #ffffff;
-}
 
-/* HTTP 和 plaintext 的自定义样式 */
-.http-method {
-  color: #61afef; /* 蓝色 */
-  font-weight: bold;
-}
-.http-url {
-  color: #98c379; /* 绿色 */
-}
-code[class*="language-http"],
-code[class*="language-plaintext"] {
-  color: #e06c75; /* 红色，用于 HTTP 和 plaintext 的默认文本颜色 */
-}
+/* GitHub 主题的语法高亮样式会由 highlight.js 的 CSS 文件提供 */
 </style>

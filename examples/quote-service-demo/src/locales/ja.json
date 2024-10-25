@@ -1,0 +1,80 @@
+{
+  "title": "見積サービス連携ガイド",
+  "step0": {
+    "title": "ステップ 0: 接続情報の設定",
+    "tokenUrl": "トークンURL",
+    "serverUrl": "WSSサーバーアドレス",
+    "appId": "App ID",
+    "secret": "シークレット",
+    "getToken": "トークンを取得"
+  },
+  "step1": {
+    "title": "ステップ 1: サーバーに接続",
+    "serverUrl": "WSSサーバーアドレス",
+    "connect": "サーバーに接続"
+  },
+  "step2": {
+    "title": "ステップ 2: 見積リクエストを送信",
+    "productInput": "製品名を入力",
+    "requestQuote": "見積を要求",
+    "showExamples": "例を表示",
+    "attachments": "添付ファイル",
+    "attachmentsPlaceholder": "添付ファイルのURLを入力してください。複数の添付ファイルはスペースで区切ってください",
+    "invalidContentJson": "コンテンツフィールドが有効なJSON形式ではありません"
+  },
+  "messages": "受信したメッセージ",
+  "fullscreen": "全画面表示",
+  "exitFullscreen": "全画面表示を終了",
+  "tokenInfo": {
+    "title": "認証トークン",
+    "expiresDate": "有効期限",
+    "ttl": "TTL"
+  },
+  "copyToken": "トークンをコピー",
+  "seconds": "秒",
+  "documentation": {
+    "title": "API ドキュメント",
+    "requestExample": "リクエスト例:",
+    "responseExample": "レスポンス例:",
+    "steps": [
+      {
+        "title": "ステップ 0: トークンの取得",
+        "description": "appidとsecretを使用して認証トークンを取得します。"
+      },
+      {
+        "title": "ステップ 1: WebSocketサーバーに接続",
+        "description": "取得したトークンを使用してWebSocketサーバーに接続します。"
+      },
+      {
+        "title": "ステップ 2: 見積リクエストの送信",
+        "description": "サーバーに製品の見積リクエストを送信します。"
+      }
+    ]
+  },
+  "copyCode": "コードをコピー",
+  "statusDisplay": {
+    "title": "ステータスログ",
+    "clearLogs": "ログをクリア",
+    "fullscreen": "全画面表示",
+    "exitFullscreen": "全画面表示を終了",
+    "messageReceived": "メッセージを受信しました",
+    "heartbeatSent": "ハートビートを送信しました"
+  },
+  "sidebar": {
+    "title": "サイドバーパネル",
+    "close": "閉じる",
+    "toggle": "サイドバーの切り替え",
+    "tabs": {
+      "logs": "ログ",
+      "msg-examples": "指示例",
+      "email-format": "メール形式"
+    }
+  },
+  "fillCommandForm": "コマンフォームに入力",
+  "emailFormatDescription": "以下は一般的なメッセージ形式の例です。各例には異なるフィールドと目的が含まれており、実際のニーズに応じて調整できます。",
+  "msgExamplesDescription": "以下は一般的な指示例です。各例は異なるタイプの指示を示しており、実際のニーズに応じて調整して使用できます。",
+  "messageSent": "送信されたメッセージ",
+  "messageReceived": "受信したメッセージ",
+  "expand": "展開",
+  "collapse": "折りたたむ"
+}

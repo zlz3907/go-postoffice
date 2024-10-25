@@ -1,0 +1,68 @@
+[
+    {
+        "desc": "获取联系人",
+        "example": {
+            "from": "/service/erp/company/001",
+            "to": [
+                "/bot/wx/ai/671b7c3cf1d2ea44ea5a9504"
+            ],
+            "subjectId": "4602483087127334272",
+            "contentType": "text/plain",
+            "type": "UPDATE_CONTACTS",
+            "references": "agent-001",
+            "content": "获取联系人",
+            "subject": "获取联系人"
+        }
+    },
+    {
+        "desc": "更新bot配置信息",
+        "example": {
+            "from": "/service/erp/company/001",
+            "to": [
+                "/bot/wx/ai/671b7c3cf1d2ea44ea5a9504"
+            ],
+            "subjectId": "4602483087127334272",
+            "contentType": "text/plain",
+            "type": "UPDATE_BOT_CONFIG",
+            "references": "agent-001",
+            "content": {
+                "isForward": true,
+                "isAllGroups": true,
+                "isAllFriends": true,
+                "monitorGroups": [],
+                "monitorFriends": [],
+                "keyWords": []
+            },
+            "subject": "更新bot配置信息"
+        }
+    },
+    {
+        "desc": "发送消息(回复消息)",
+        "example": {
+            "from": "/service/erp/company/001",
+            "to": [
+                "/bot/wx/ai/671b7c3cf1d2ea44ea5a9504"
+            ],
+            "subjectId": "4602483087127334272",
+            "contentType": "text/plain",
+            "type": "SEND_REPLY_MSG",
+            "content": "hello",
+            "attachments": [
+                {
+                    "_is_self": false,
+                    "_is_group": false,
+                    "type": 1,
+                    "id": 2981906840891255300,
+                    "ts": 1729871840,
+                    "sign": "ec6b98d31fe33cd9953a16ffb6a9456c",
+                    "xml": "",
+                    "sender": "xxx",
+                    "roomid": "xxx_xxx",
+                    "content": "1",
+                    "thumb": "",
+                    "extra": ""
+                  }
+            ]
+        }
+    }
+]

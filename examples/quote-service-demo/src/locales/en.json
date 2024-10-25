@@ -2,19 +2,53 @@
   "title": "Quote Service Integration Guide",
   "step0": {
     "title": "Step 0: Configure Connection Information",
+    "tokenUrl": "Token URL",
     "serverUrl": "WSS Server Address",
     "appId": "App ID",
     "secret": "Secret",
-    "getToken": "Get Token"
+    "getToken": "Get Token",
+    "gettingToken": "Getting Token...",
+    "tokenSuccess": "Token obtained successfully",
+    "tokenError": "Failed to get Token, please check input information"
   },
   "step1": {
     "title": "Step 1: Connect to Server",
-    "connect": "Connect to Server"
+    "serverUrl": "WSS Server Address",
+    "connect": "Connect to Server",
+    "tokenRequired": "Please get a token first",
+    "connected": "Connected to server",
+    "connectionError": "Connection error, please try again",
+    "connectionClosed": "Connection closed"
   },
   "step2": {
-    "title": "Step 2: Send Quote Request",
-    "productInput": "Enter Product Name",
-    "requestQuote": "Request Quote"
+    "title": "Step 2: Send Command",
+    "from": "From",
+    "fromPlaceholder": "Enter sender ID",
+    "to": "To",
+    "toPlaceholder": "Enter receiver ID",
+    "subject": "Subject",
+    "subjectPlaceholder": "Enter message subject",
+    "content": "Content",
+    "contentPlaceholder": "Enter message content",
+    "type": "Type",
+    "showOptional": "Show optional fields",
+    "hideOptional": "Hide optional fields",
+    "cc": "CC",
+    "ccPlaceholder": "Enter CC recipient ID",
+    "contentType": "Content Type",
+    "contentTypePlaceholder": "Enter content type",
+    "charset": "Charset",
+    "charsetPlaceholder": "Enter charset",
+    "level": "Level",
+    "levelPlaceholder": "Enter level",
+    "tags": "Tags",
+    "tagsPlaceholder": "Enter tags, separated by commas",
+    "sendCommand": "Send Command",
+    "connectionError": "WebSocket is not connected, please connect to the server first",
+    "showExamples": "Show Examples",
+    "attachments": "Attachments",
+    "attachmentsPlaceholder": "Enter attachment URLs, separate multiple attachments with spaces",
+    "invalidContentJson": "The content field is not valid JSON format"
   },
   "messages": "Received Messages",
   "fullscreen": "Fullscreen",
@@ -45,5 +79,30 @@
       }
     ]
   },
-  "copyCode": "Copy code"
+  "copyCode": "Copy code",
+  "statusDisplay": {
+    "title": "Status Log",
+    "clearLogs": "Clear Logs",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit Fullscreen",
+    "messageReceived": "Message received",
+    "heartbeatSent": "Heartbeat sent"
+  },
+  "sidebar": {
+    "title": "Sidebar Panel",
+    "close": "Close",
+    "toggle": "Toggle Sidebar",
+    "tabs": {
+      "logs": "Logs",
+      "msg-examples": "Instruction Examples",
+      "email-format": "Email Format"
+    }
+  },
+  "fillCommandForm": "Fill Command Form",
+  "emailFormatDescription": "Below are some common message format examples. Each example contains different fields and purposes, which can be adjusted according to actual needs.",
+  "msgExamplesDescription": "Below are some common instruction examples. Each example demonstrates different types of instructions that can be adjusted and used according to actual needs.",
+  "messageSent": "Message sent",
+  "messageReceived": "Message received",
+  "expand": "Expand",
+  "collapse": "Collapse"
 }
