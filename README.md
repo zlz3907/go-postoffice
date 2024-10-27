@@ -4,6 +4,8 @@
 
 GO-POSTOFFICE is a high-performance WebSocket server implementation based on Go, designed using the post office concept model. This project primarily handles connection management, security authentication, and message (mail) distribution and delivery.
 
+![Go-Postoffice Communication Structure](docs/imgs/global_architecture_diagram_en.png)
+
 ## Table of Contents
 
 1. [Features](#features)

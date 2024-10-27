@@ -4,6 +4,8 @@
 
 GO-POSTOFFICE 是一个基于 Go 语言实现的高性能 WebSocket 服务器，采用邮局概念模型设计。该项目主要处理连接管理、安全认证以及消息（邮件）的分发和投递。
 
+![Go-Postoffice Communication Structure](docs/imgs/global_architecture_diagram_cn.png)
+
 ## 目录
 
 1. [特性](#特性)
