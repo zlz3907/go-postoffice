@@ -17,10 +17,16 @@ import (
 // PostOffice 结构体用于管理 WebSocket 连接
 type PostOffice struct {
 	upgrader        websocket.Upgrader
-	clients         sync.Map // key: channelId, value: *websocket.Conn
+	clients         sync.Map // key: channelId, value: *Client
 	connectionCount int32
 	maxConnections  int32
 	schema          *gojsonschema.Schema
+}
+
+// Client 结构体用于存储客户端连接及其互斥锁
+type Client struct {
+	conn  *websocket.Conn
+	mutex sync.Mutex
 }
 
 // NewPostOffice 创建一个新的 PostOffice 实例
@@ -64,6 +70,12 @@ func (po *PostOffice) validateConnection(r *http.Request) bool {
 
 // HandleConnection 处理 WebSocket 连接的升级和消息接收
 func (po *PostOffice) HandleConnection(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("Recovered from panic in HandleConnection: %v\n", r)
+		}
+	}()
+
 	if atomic.LoadInt32(&po.connectionCount) >= po.maxConnections {
 		http.Error(w, "Connection limit reached", http.StatusServiceUnavailable)
 		return
@@ -75,7 +87,6 @@ func (po *PostOffice) HandleConnection(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 从查询参数中获取客户端 ID
 	clientID := r.URL.Query().Get("clientID")
 	if clientID == "" {
 		http.Error(w, "Client ID is required", http.StatusBadRequest)
@@ -84,53 +95,70 @@ func (po *PostOffice) HandleConnection(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := po.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Println("Error during connection upgrade:", err)
 		return
 	}
 
 	atomic.AddInt32(&po.connectionCount, 1)
 	defer atomic.AddInt32(&po.connectionCount, -1)
 
-	po.clients.Store(clientID, conn)
-	fmt.Printf("Client connected: %s (Total: %d/%d)\n", clientID, atomic.LoadInt32(&po.connectionCount), po.maxConnections)
+	po.clients.Store(clientID, &Client{
+		conn: conn,
+	})
+	fmt.Printf("Client connected: %s\n", clientID)
 
 	defer func() {
 		conn.Close()
 		po.clients.Delete(clientID)
-		fmt.Printf("Client disconnected: %s (Total: %d/%d)\n", clientID, atomic.LoadInt32(&po.connectionCount), po.maxConnections)
+		fmt.Printf("Client disconnected: %s\n", clientID)
 	}()
 
-	// 创建一个带缓冲的通道用于消息处理
 	msgChan := make(chan []byte, 100)
 	
-	// 启动一个 goroutine 专门处理消息发送
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				fmt.Printf("Recovered from panic in message processing: %v\n", r)
+			}
+		}()
+
 		for message := range msgChan {
-			po.messageDelivery(message)
+			func() {
+				defer func() {
+					if r := recover(); r != nil {
+						fmt.Printf("Recovered from panic in messageDelivery: %v\n", r)
+					}
+				}()
+				po.messageDelivery(message)
+			}()
 		}
 	}()
 
-	// 主循环读取消息
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
-			fmt.Println("Error reading message:", err)
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				fmt.Printf("Connection error for %s: %v\n", clientID, err)
+			}
 			close(msgChan)
 			return
 		}
-		// 将消息发送到通道，非阻塞方式
+
 		select {
 		case msgChan <- message:
-			// 消息成功加入队列
 		default:
-			// 队列已满，可以选择丢弃消息或者记录日志
-			fmt.Println("Message queue is full, message dropped")
+			// 队列满时静默丢弃消息
 		}
 	}
 }
 
 // messageDelivery 处理消息分发
 func (po *PostOffice) messageDelivery(msg []byte) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("Recovered from panic in messageDelivery: %v\n", r)
+		}
+	}()
+
 	// 如果存在 schema，则进行验证
 	if po.schema != nil {
 		result, err := po.schema.Validate(gojsonschema.NewBytesLoader(msg))
@@ -139,60 +167,83 @@ func (po *PostOffice) messageDelivery(msg []byte) {
 			return
 		}
 		if !result.Valid() {
-			fmt.Println("Invalid message:")
-			for _, desc := range result.Errors() {
-				fmt.Printf("- %s\n", desc)
-			}
+			fmt.Println("Invalid message schema")
 			return
 		}
 	}
 
 	// 消息处理逻辑
 	msgJson := gjson.ParseBytes(msg)
-	fmt.Printf("Received message: %s\n", string(msg))
-
+	
+	// 只打印关键字段，不打印整个消息内容
+	from := msgJson.Get("from").String()
 	to := msgJson.Get("to")
+	msgType := msgJson.Get("type").String()
+	
 	if to.Exists() {
 		if to.IsArray() {
 			targets := to.Array()
-			fmt.Printf("Targets: %v\n", targets)
+			// 只打印消息的基本信息
+			if msgType != "heartbeat" {  // 心跳消息不打印
+				fmt.Printf("Broadcasting message from %s to %d targets, type: %s\n", 
+					from, len(targets), msgType)
+			}
 			for _, target := range targets {
 				po.delivery(target.String(), msg)
 			}
 		} else {
 			target := to.String()
-			fmt.Printf("Single target: %s\n", target)
+			if msgType != "heartbeat" {  // 心跳消息不打印
+				fmt.Printf("Sending message from %s to %s, type: %s\n", 
+					from, target, msgType)
+			}
 			po.delivery(target, msg)
 		}
-	} else {
-		fmt.Println("No 'to' field in the message")
 	}
 }
 
 // delivery 向指定的目标发送消息
 func (po *PostOffice) delivery(targetChannelId string, msg []byte) {
-	if connInterface, ok := po.clients.Load(targetChannelId); ok {
-		if conn, ok := connInterface.(*websocket.Conn); ok {
-			// 使用 WriteControl 发送一个 ping 来检查连接状态
-			err := conn.WriteControl(websocket.PingMessage, []byte{}, time.Now().Add(time.Second))
-			if err != nil {
-				fmt.Printf("Connection check failed for %s: %v\n", targetChannelId, err)
-				po.clients.Delete(targetChannelId)
-				return
-			}
-
-			err = conn.WriteMessage(websocket.TextMessage, msg)
-			if err != nil {
-				fmt.Printf("Error sending message to %s: %v\n", targetChannelId, err)
-				po.clients.Delete(targetChannelId)
-			} else {
-				fmt.Printf("Message sent to %s\n", targetChannelId)
-			}
-		} else {
-			fmt.Printf("Invalid connection type for %s\n", targetChannelId)
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("Recovered from panic in delivery to %s: %v\n", targetChannelId, r)
 		}
-	} else {
-		fmt.Printf("Client %s not found\n", targetChannelId)
+	}()
+
+	if clientInterface, ok := po.clients.Load(targetChannelId); ok {
+		if client, ok := clientInterface.(*Client); ok {
+			lockChan := make(chan struct{})
+			go func() {
+				client.mutex.Lock()
+				close(lockChan)
+			}()
+
+				select {
+				case <-lockChan:
+					defer client.mutex.Unlock()
+				case <-time.After(5 * time.Second):
+					fmt.Printf("Lock timeout for client %s\n", targetChannelId)
+					return
+				}
+
+				writeTimeout := time.Now().Add(5 * time.Second)
+				if err := client.conn.SetWriteDeadline(writeTimeout); err != nil {
+					return
+				}
+
+				// 检查连接状态
+				if err := client.conn.WriteControl(websocket.PingMessage, []byte{}, writeTimeout); err != nil {
+					po.clients.Delete(targetChannelId)
+					return
+				}
+
+				if err := client.conn.WriteMessage(websocket.TextMessage, msg); err != nil {
+					po.clients.Delete(targetChannelId)
+				}
+
+				// 重置写入超时
+				client.conn.SetWriteDeadline(time.Time{})
+		}
 	}
 }
 
