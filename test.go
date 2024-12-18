@@ -4,155 +4,112 @@
 package main
 
 import (
-	"crypto/tls"
-	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
 	"net/url"
-	"sync"
+	"os"
+	"os/signal"
 	"time"
 
 	"github.com/gorilla/websocket"
+
+	"ai.zhycit.com/socket"
 )
 
-const (
-	wsServerURL     = "ws://socket.zhycit.com" // 使用本地地址进行测试
-	wssServerURL    = "wss://localhost:7503"   // WSS URL，如果配置了SSL
-	numConnections  = 3                        // 尝试连接的总数
-	messageInterval = 1 * time.Second
-	authToken       = "your-auth-token-here" // 替换为实际的认证令牌
-)
+var addr = flag.String("addr", "localhost:8080", "http service address")
 
-type Client struct {
-	ID   string
-	Conn *websocket.Conn
+func startServer() *socket.PostOffice {
+	// 创建 PostOffice 实例
+	po, err := socket.NewPostOffice(100, "") // 最大连接数100，不使用schema验证
+	if err != nil {
+		log.Fatal("Failed to create PostOffice:", err)
+	}
+
+	// 设置WebSocket路由
+	http.HandleFunc("/ws", po.HandleConnection)
+
+	// 启动HTTP服务器
+	go func() {
+		log.Printf("Starting server on %s", *addr)
+		if err := http.ListenAndServe(*addr, nil); err != nil {
+			log.Fatal("ListenAndServe:", err)
+		}
+	}()
+
+	return po
 }
 
-type Message struct {
-	From    string      `json:"from"`
-	To      interface{} `json:"to"` // 可以是字符串或字符串数组
-	Subject string      `json:"subject"`
-	Content interface{} `json:"content"` // 可以是任何类型
-	Type    string      `json:"type"`    // 更新为字符串类型
-}
+func runClient(clientID string, targetID string, done chan struct{}) {
+	// 构建WebSocket URL
+	u := url.URL{Scheme: "ws", Host: *addr, Path: "/ws"}
+	queryParams := u.Query()
+	queryParams.Set("clientID", clientID)
+	u.RawQuery = queryParams.Encode()
 
-var clients []*Client
-var mutex sync.Mutex
+	// 连接WebSocket服务器
+	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
+	if err != nil {
+		log.Fatal("dial:", err)
+	}
+	defer c.Close()
+
+	// 创建接收消息的goroutine
+	go func() {
+		for {
+			_, message, err := c.ReadMessage()
+			if err != nil {
+				log.Println("read:", err)
+				return
+			}
+			log.Printf("Client %s received: %s", clientID, message)
+		}
+	}()
+
+	// 发送测试消息
+	message := fmt.Sprintf(`{"to":"%s","content":"Message from %s","timestamp":"%s"}`, 
+		targetID, 
+		clientID,
+		time.Now().Format(time.RFC3339))
+
+	// 连续发送5条消息
+	for i := 0; i < 5; i++ {
+		err := c.WriteMessage(websocket.TextMessage, []byte(message))
+		if err != nil {
+			log.Println("write:", err)
+			return
+		}
+		log.Printf("Client %s sent message %d", clientID, i+1)
+		time.Sleep(time.Millisecond * 100) // 短暂延迟，模拟连续发送
+	}
+
+	time.Sleep(time.Second * 2) // 等待接收响应
+	done <- struct{}{}
+}
 
 func main() {
-	// 尝试创建多个客户端连接
-	for i := 0; i < numConnections; i++ {
-		client, err := connectWebSocket(wsServerURL) // 使用 WS
-		// client, err := connectWebSocket(wssServerURL) // 使用 WSS
-		if err != nil {
-			log.Printf("Failed to connect client %d: %v", i, err)
-			continue
-		}
-		clients = append(clients, client)
-		go readMessages(client)
-		log.Printf("Client %s connected successfully", client.ID)
-	}
+	flag.Parse()
 
-	log.Printf("Successfully connected clients: %d", len(clients))
+	// 启动服务器
+	startServer()
+	time.Sleep(time.Second) // 等待服务器启动
 
-	// 每秒发送消息
-	ticker := time.NewTicker(messageInterval)
-	for range ticker.C {
-		if len(clients) > 0 {
-			sender := clients[rand.Intn(len(clients))]
-			sendMessageToAll(sender)
-		}
-	}
-}
+	// 创建用于等待客户端完成的通道
+	done := make(chan struct{})
 
-func connectWebSocket(serverURL string) (*Client, error) {
-	clientID := fmt.Sprintf("Client-%d", rand.Intn(1000))
-	u, _ := url.Parse(serverURL)
-	q := u.Query()
-	q.Set("clientID", clientID)
-	u.RawQuery = q.Encode()
+	// 启动两个测试客户端
+	go runClient("client1", "client2", done)
+	go runClient("client2", "client1", done)
 
-	// 创建自定义的 header
-	header := http.Header{}
-	header.Add("Authorization", "Bearer "+authToken)
+	// 等待两个客户端完成
+	<-done
+	<-done
 
-	// 使用自定义的 Dialer
-	dialer := websocket.Dialer{
-		Proxy:            http.ProxyFromEnvironment,
-		HandshakeTimeout: 45 * time.Second,
-		TLSClientConfig:  &tls.Config{InsecureSkipVerify: true}, // 仅用于测试，生产环境应移除
-	}
+	// 等待中断信号以优雅地关闭服务器
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt)
+	<-interrupt
 
-	conn, _, err := dialer.Dial(u.String(), header)
-	if err != nil {
-		return nil, err
-	}
-	return &Client{
-		ID:   clientID,
-		Conn: conn,
-	}, nil
-}
-
-func readMessages(client *Client) {
-	for {
-		_, message, err := client.Conn.ReadMessage()
-		if err != nil {
-			log.Printf("Error reading message for %s: %v", client.ID, err)
-			removeClient(client)
-			return
-		}
-		log.Printf("%s received: %s", client.ID, string(message))
-	}
-}
-
-func sendMessageToAll(sender *Client) {
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	var recipients []string
-	for _, client := range clients {
-		if client.ID != sender.ID {
-			recipients = append(recipients, client.ID)
-		}
-	}
-
-	content := fmt.Sprintf("Hello from %s at %s", sender.ID, time.Now().Format(time.RFC3339))
-	message := Message{
-		From:    sender.ID,
-		To:      append(recipients, "1234567890"),
-		Subject: "Test Message",
-		Content: content,
-		Type:    "msg", // 使用字符串类型的消息类型
-	}
-
-	jsonMessage, err := json.Marshal(message)
-	if err != nil {
-		log.Printf("Error marshaling message: %v", err)
-		return
-	}
-
-	log.Printf("Sending message: %s", string(jsonMessage))
-	err = sender.Conn.WriteMessage(websocket.TextMessage, jsonMessage)
-	if err != nil {
-		log.Printf("Error sending message from %s: %v", sender.ID, err)
-		removeClient(sender)
-	} else {
-		log.Printf("Message sent successfully from %s", sender.ID)
-	}
-}
-
-func removeClient(client *Client) {
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	for i, c := range clients {
-		if c.ID == client.ID {
-			clients = append(clients[:i], clients[i+1:]...)
-			client.Conn.Close()
-			log.Printf("Client %s removed", client.ID)
-			return
-		}
-	}
+	log.Println("Test completed")
 }

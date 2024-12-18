@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/tidwall/gjson"
@@ -99,13 +100,32 @@ func (po *PostOffice) HandleConnection(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Client disconnected: %s (Total: %d/%d)\n", clientID, atomic.LoadInt32(&po.connectionCount), po.maxConnections)
 	}()
 
+	// 创建一个带缓冲的通道用于消息处理
+	msgChan := make(chan []byte, 100)
+	
+	// 启动一个 goroutine 专门处理消息发送
+	go func() {
+		for message := range msgChan {
+			po.messageDelivery(message)
+		}
+	}()
+
+	// 主循环读取消息
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
 			fmt.Println("Error reading message:", err)
+			close(msgChan)
 			return
 		}
-		po.messageDelivery(message)
+		// 将消息发送到通道，非阻塞方式
+		select {
+		case msgChan <- message:
+			// 消息成功加入队列
+		default:
+			// 队列已满，可以选择丢弃消息或者记录日志
+			fmt.Println("Message queue is full, message dropped")
+		}
 	}
 }
 
@@ -153,7 +173,15 @@ func (po *PostOffice) messageDelivery(msg []byte) {
 func (po *PostOffice) delivery(targetChannelId string, msg []byte) {
 	if connInterface, ok := po.clients.Load(targetChannelId); ok {
 		if conn, ok := connInterface.(*websocket.Conn); ok {
-			err := conn.WriteMessage(websocket.TextMessage, msg)
+			// 使用 WriteControl 发送一个 ping 来检查连接状态
+			err := conn.WriteControl(websocket.PingMessage, []byte{}, time.Now().Add(time.Second))
+			if err != nil {
+				fmt.Printf("Connection check failed for %s: %v\n", targetChannelId, err)
+				po.clients.Delete(targetChannelId)
+				return
+			}
+
+			err = conn.WriteMessage(websocket.TextMessage, msg)
 			if err != nil {
 				fmt.Printf("Error sending message to %s: %v\n", targetChannelId, err)
 				po.clients.Delete(targetChannelId)

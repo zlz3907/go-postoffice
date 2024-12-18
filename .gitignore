@@ -38,3 +38,6 @@ Thumbs.db
 
 # Publish files
 /dist/
+
+# Compressed tar archives
+*.tar.gz

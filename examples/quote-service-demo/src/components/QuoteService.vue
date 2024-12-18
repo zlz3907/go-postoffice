@@ -1,5 +1,21 @@
 <template>
   <div class="quote-service container">
+    <div class="language-selector">
+      <select v-model="locale" class="form-control">
+        <option value="zh">中文</option>
+        <option value="en">English</option>
+        <option value="ko">한국어</option>
+        <option value="ja">日本語</option>
+        <option value="ug">ئۇيغۇرچە</option>
+        <option value="de">Deutsch</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="bo">བོད་ཡིག</option>
+        <option value="lo">ລາວ</option>
+        <option value="sn">ChiShona</option>
+      </select>
+    </div>
+
     <h1>{{ t('title') }}</h1>
     
     <div class="step">
@@ -118,7 +134,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, reactive, onUnmounted } from 'vue'
+import { ref, computed, onMounted, reactive, onUnmounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import commandExamples from '../command-examples.json'
 
@@ -312,7 +328,7 @@ export default {
           Object.entries(message).filter(([_, v]) => v != null && v !== '')
         )
         
-        // ��需要额外处理 content 字段，因为已经是正确的格式了
+        // 需要额外处理 content 字段，因为已经是正确的格式了
         
         socket.value.send(JSON.stringify(cleanMessage))
         console.log("指令已发送:", cleanMessage)
@@ -358,9 +374,29 @@ export default {
       })
     }
 
+    const messageTypes = computed(() => [
+      { value: 'UPDATE_CONTACTS', label: t('messageTypes.updateContacts') },
+      { value: 'UPDATE_BOT_CONFIG', label: t('messageTypes.updateBotConfig') },
+      { value: 'SEND_REPLY_MSG', label: t('messageTypes.sendReplyMsg') }
+    ])
+
     onMounted(() => {
       updateTokenUrl();
-      locale.value = 'zh'
+      // 从本地存储获取上次使用的语言，如果没有则默认使用浏览器语言
+      const savedLocale = localStorage.getItem('preferredLocale');
+      if (savedLocale) {
+        locale.value = savedLocale;
+      } else {
+        // 获取浏览器语言并匹配支持的语言
+        const browserLang = navigator.language.split('-')[0];
+        const supportedLocales = ['zh', 'en', 'ko', 'ja', 'ug', 'de', 'es', 'fr', 'bo', 'lo', 'sn'];
+        locale.value = supportedLocales.includes(browserLang) ? browserLang : 'en';
+      }
+    })
+
+    // 监听语言变化并保存到本地存储
+    watch(() => locale.value, (newLocale) => {
+      localStorage.setItem('preferredLocale', newLocale);
     })
 
     onUnmounted(() => {
@@ -400,6 +436,7 @@ export default {
       updateMessageContent,
       stopHeartbeat, // 添加这行，将 stopHeartbeat 函数暴露给组件实例
       isContentObject, // 添加这行
+      messageTypes,
     }
   },
   data() {
@@ -614,6 +651,132 @@ select.form-control {
 textarea {
   white-space: pre-wrap;
   min-height: 100px;
+}
+
+/* 添加新的样式 */
+.language-selector {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+}
+
+.language-selector select {
+  padding: 0.3rem 1.5rem 0.3rem 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* 响应式设计优化 */
+@media (max-width: 768px) {
+  .quote-service {
+    padding: 5px;
+  }
+
+  .language-selector {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin-bottom: 1rem;
+    text-align: right;
+  }
+
+  .form-group label {
+    font-size: 0.7rem;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .step {
+    padding: 0.75rem;
+  }
+
+  .token-info {
+    font-size: 0.8rem;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .quote-service {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+
+  .step {
+    background-color: #2d2d2d;
+    border-color: #404040;
+  }
+
+  .form-control {
+    background-color: #333333;
+    color: #ffffff;
+    border-color: #404040;
+  }
+
+  .form-group label {
+    background-color: #2d2d2d;
+    color: #ffffff;
+  }
+
+  .token-info {
+    background-color: #333333;
+  }
+
+  .optional-fields {
+    background-color: #333333;
+  }
+
+  .btn-primary {
+    background-color: #0066cc;
+    border-color: #0066cc;
+  }
+
+  .btn-secondary {
+    background-color: #4d4d4d;
+    border-color: #4d4d4d;
+  }
+}
+
+/* 动画效果 */
+.step {
+  transition: all 0.3s ease;
+}
+
+.step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* 加载动画 */
+.loading {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
 
