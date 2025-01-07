@@ -1,0 +1,11 @@
+{
+	"dataSource": {
+		"redis": {
+			"gnas-ai": {
+				"uri": "redis-private.redis.172.16.0.190.nip.io:32611"
+			}
+		}
+	},
+	"socketPort": 7502,
+	"maxWebSocketConnections": 20000
+}

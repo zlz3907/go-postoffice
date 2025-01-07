@@ -1,0 +1,14 @@
+{
+	"dataSource": {
+		"redis": {
+			"gnas-ai": {
+				"uri": "127.0.0.1:6379"
+			}
+		}
+	},
+	"socketPort": 7502,
+	"sslPort": 7503,
+	"sslCertPath": "./cert/cert.pem",
+	"sslKeyPath": "./cert/key.pem",
+	"maxWebSocketConnections": 20
+}
